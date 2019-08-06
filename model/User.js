@@ -11,7 +11,13 @@ const UserSchema = new Schema({
     required: true,
     lowercase: true
   },
-  password: String
+  username: String,
+  accessToken: String,
+  refreshToken: String,
+  votesCollected:{
+    type: Array,
+    required: true
+  }
 });
 
 

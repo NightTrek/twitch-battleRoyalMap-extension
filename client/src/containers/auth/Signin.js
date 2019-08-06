@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { compose } from 'redux';
@@ -6,51 +7,14 @@ import * as actions from '../../actions';
 
 
 class Signin extends Component {
-  // Our onSubmit function in reduxForm first argument
-  // the properties that the user has submitted from the form
-  onSubmit = formProps => {
-    console.log(formProps);
-    this.props.signin(formProps, () => {
-      // After the user signs in, we call the callback function
-      // to redirect to /feature
-      this.props.history.push('/feature');
-    });
 
-  }
-
-  renderInput = ({ input }) => {
-    return <input {...input}/>
-  }
   render(){
-    // We are getting the handleSubmit function from reduxForm
-    const { handleSubmit } = this.props;
-
     return (
-      // handleSubmit takes a function to call
-      // When the user submits this form
-      <form onSubmit={handleSubmit(this.onSubmit)}>
-        {/*A fieldset is used to wrap a group of fields*/}
-        <fieldset>
-          <label>Email</label>
-          <Field
-            name='email'
-            type='text'
-            component={this.renderInput}
-            autoComplete='none'/>
-        </fieldset>
-        <fieldset>
-          <label>Password</label>
-          <Field
-            name='password'
-            type='password'
-            component={this.renderInput}
-            autoComplete='none'/>
-        </fieldset>
         <div>
-          {this.props.errorMessage}
-        </div>
-        <button>Signin</button>
-      </form>
+          <div>
+              <a href="http://localhost:3001/auth/twitch"><img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png"/></a>
+          </div>
+      </div>
     )
   }
 }
