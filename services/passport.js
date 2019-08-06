@@ -10,26 +10,26 @@ const LocalStrategy = require('passport-local');
 // By default localstrategy is expecting a username and a password
 // With the config we setup below, it will look for an email instead and not a username
 const localOptions = { usernameField: 'email' };
-const localLogin = new LocalStrategy(localOptions, async (email, password, done) => {
-  try {
-    const user = await User.findOne({ email });
-    if(!user) {
-      return done(null, false);
-    user.comparePassword(password, (err, isMatch) => {
-      if(err) {
-        return done(err)
-      }
-      if(!isMatch) {
-        return done(null, false);
-      }
-
-      // Passport attaches the user found here to req.user
-      return done(null, user);
-    });
-  } catch(err) {
-    done(err);
-  }
-});
+// const localLogin = new LocalStrategy(localOptions, async (email, password, done) => {
+//   try {
+//     const user = await User.findOne({ email });
+//     if(!user) {
+//       return done(null, false);
+//     user.comparePassword(password, (err, isMatch) => {
+//       if(err) {
+//         return done(err)
+//       }
+//       if(!isMatch) {
+//         return done(null, false);
+//       }
+//
+//       // Passport attaches the user found here to req.user
+//       return done(null, user);
+//     });
+//   } catch(err) {
+//     done(err);
+//   }
+// });
 
 
 // Setup options fot JWT Strategy
