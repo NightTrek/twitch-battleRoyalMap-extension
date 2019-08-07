@@ -134,6 +134,8 @@ app.use(express.static('public'));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 
 
@@ -154,6 +156,9 @@ app.get('/auth/user', function (req, res) {
 });
 
 
+app.use(routes);
+
+
 
 //production setup
 
@@ -171,5 +176,5 @@ if(process.env.NODE_ENV === 'production') {
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, function () {
-    console.log('Twitch auth sample listening on port 3000!')
+    console.log(`Twitch auth sample listening on port ${PORT}`);
 });
