@@ -143,12 +143,12 @@ app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedire
 
 
 app.get('/auth/user', function (req, res) {
-    if(req.session && req.session.passport && req.session.passport.user) {
-        res.send(template(req.session.passport.user));
+    if (req.session && req.session.passport && req.session.passport.user) {
+        res.send(req.session.passport.user);
     } else {
-
+        res.send("invalid Login")
     }
-
+});
 
 
 
