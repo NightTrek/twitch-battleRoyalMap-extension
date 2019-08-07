@@ -1,7 +1,8 @@
 import React from 'react';
 
 import './App.css'
-import NavbarHeader from './NavBarHeader';
+
+import Header from './NavBarHeader';
 
 
 export default ({ children  }) => {
