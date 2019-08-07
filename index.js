@@ -98,17 +98,36 @@ passport.use('twitch', new OAuth2Strategy({
         profile.accessToken = accessToken;
         profile.refreshToken = refreshToken;
         console.log(profile)
-        logger.log({
-            level: 'info',
-            message: JSON.stringify(profile)
-        });
-        let isUser = await User.find({email:profile.data[0].email})
-        console.log(`is user is ================================================
+
+        try{
+           let isUser = await User.find({email:profile.data[0].email})
+            console.log(`is user is ================================================
         =========== ${isUser} =======================================================`);
-        if(!isUser){
-             let newUser = await User.create({email:profile.data[0].email, username: profile.data[0].display_name,
-                 profileImg:profile.data[0].profile_image_url, view_count:profile.view_count, accessToken:profile.accessToken,refreshToken:profile.refreshToken});
+            if(isUser == " " || isUser == ""||isUser == null) {
+                let newUser = await User.create({
+                    email: profile.data[0].email,
+                    username: profile.data[0].display_name,
+                    profileImg: profile.data[0].profile_image_url,
+                    view_count: profile.view_count,
+                    accessToken: profile.accessToken,
+                    refreshToken: profile.refreshToken
+                });
+                console.log(newUser);
+                logger.log({
+                    level: 'info',
+                    message: "LOGGING NEW USER"+JSON.stringify(newUser)
+                });
+            }else{
+                logger.log({
+                    level: 'info',
+                    message: "LOGGING USER"+JSON.stringify(isUser)
+                });
+            }
+
+        }catch(err){
+            console.log(err)
         }
+
 
         done(null, profile);
     }
@@ -122,14 +141,14 @@ app.get('/auth/twitch', passport.authenticate('twitch', { scope: 'user:read:emai
 app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedirect: 'http://localhost:3000/auth/success', failureRedirect: '/' }));
 
 
-app.post('/auth/storeUser', (req,res) => {
-    logger.log({
-        level: 'info',
-        message: JSON.stringify(req.body)
-    });
-    console.log(req.body)
-    res.send("success")
-});
+
+app.get('/auth/user', function (req, res) {
+    if(req.session && req.session.passport && req.session.passport.user) {
+        res.send(template(req.session.passport.user));
+    } else {
+
+    }
+
 
 
 
