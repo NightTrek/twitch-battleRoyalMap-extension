@@ -1,19 +1,19 @@
 import React from 'react'
 
-const Card = () => {
+const Card = (props) => {
+  let cardClass = "card mt-5 ";
+  if(props.color){
+    cardClass += props.color
+  }
   return (
     <div className="card mt-5">
       <div className="card-body">
-        <h5 className="card-title">Card title</h5>
+        <h5 className="card-title">{props.title}</h5>
         <hr />
         <p className="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
+          {props.bodyText}
         </p>
-        <p className="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </p>
+        {props.children}
       </div>
     </div>
   )
