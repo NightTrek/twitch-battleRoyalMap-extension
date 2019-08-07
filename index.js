@@ -12,7 +12,7 @@ const mongoose       = require('mongoose');
 //local files
 const config         = require("./config");
 const User          = require('./model/User');
-const routes        = require('');
+const routes        = require('./routes');
 //
 //======================================================================================
 
@@ -20,7 +20,7 @@ const routes        = require('');
 const TWITCH_CLIENT_ID = config.clientId;
 const TWITCH_SECRET    = config.clientSecret;
 const SESSION_SECRET   = config.secret;
-const CALLBACK_URL     = 'http://localhost:3000/auth/twitch/callback';  // You can run locally with - http://localhost:3000/auth/twitch/callback
+const CALLBACK_URL     = 'http://localhost:3001/auth/twitch/callback';  // You can run locally with - http://localhost:3000/auth/twitch/callback
 
 const cors = require('cors');
 //start db connection
@@ -39,7 +39,8 @@ const logger = winston.createLogger({
 });
 
 try{
-    mongoose.connect('mongodb://localhost:auth/auth', { useNewUrlParser: true, useCreateIndex: true });
+    mongoose.connect('mongodb://localhost:twitch/vote-your-landing', { useNewUrlParser: true, useCreateIndex: true });
+    console.log("mongo connected")
 }catch(err){//
     console.log(err);
 }
@@ -70,7 +71,6 @@ OAuth2Strategy.prototype.userProfile = function(accessToken, done) {
     request(options, async function (error, response, body) {
         if (response && response.statusCode == 200) {
 
-            let axres = await axios.post("http://localhost:3001/auth/storeUser",{data:JSON.parse(body)})
             done(null, JSON.parse(body));
         } else {
             done(JSON.parse(body));
@@ -97,14 +97,18 @@ passport.use('twitch', new OAuth2Strategy({
     async function(accessToken, refreshToken, profile, done) {
         profile.accessToken = accessToken;
         profile.refreshToken = refreshToken;
-        console.log('================================================================');
         console.log(profile)
-        let axres = await axios.post("http://localhost:3001/auth/storeUser",{data:JSON.parse(profile)})
-
-        // Securely store user profile in your DB
-        //User.findOrCreate(..., function(err, user) {
-        //  done(err, user);
-        //});
+        logger.log({
+            level: 'info',
+            message: JSON.stringify(profile)
+        });
+        let isUser = await User.find({email:profile.data[0].email})
+        console.log(`is user is ================================================
+        =========== ${isUser} =======================================================`);
+        if(!isUser){
+             let newUser = await User.create({email:profile.data[0].email, username: profile.data[0].display_name,
+                 profileImg:profile.data[0].profile_image_url, view_count:profile.view_count, accessToken:profile.accessToken,refreshToken:profile.refreshToken});
+        }
 
         done(null, profile);
     }
@@ -115,7 +119,7 @@ passport.use('twitch', new OAuth2Strategy({
 app.get('/auth/twitch', passport.authenticate('twitch', { scope: 'user:read:email' }));
 
 // Set route for OAuth redirect CHANGE THE REDIRECT LINK
-app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedirect: '/auth/storeUser', failureRedirect: '/' }));
+app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedirect: 'http://localhost:3000/auth/success', failureRedirect: '/' }));
 
 
 app.post('/auth/storeUser', (req,res) => {

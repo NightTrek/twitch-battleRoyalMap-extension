@@ -12,11 +12,12 @@ const UserSchema = new Schema({
     lowercase: true
   },
   username: String,
+  profileIMG: String,
+  view_count: Number,
   accessToken: String,
   refreshToken: String,
   votesCollected:{
     type: Array,
-    required: true
   }
 });
 
