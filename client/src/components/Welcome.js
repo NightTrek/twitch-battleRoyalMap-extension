@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import { signin} from "../actions";
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 
 //import react components
-// import navbar from 'navbar'
+
 import Container from './Partials/Container';
 import Column from './Partials/Column';
 import Row from './Partials/Row';
 import ColorDisplayPanel from './Partials/ColorDisplayPanel';
+
 class Welcome extends Component {
 
     render() {
@@ -17,7 +17,6 @@ class Welcome extends Component {
         console.log(this.props);
         return(
             <div className={"bg-info"}>
-                {/*<NavBar>*/}
                 <Container>
                     <Row><h1>Vote your Landing BattleRoyal </h1></Row>
                     <Row>
@@ -45,6 +44,7 @@ class Welcome extends Component {
                         </Column>
                     </Row>
                     <Row>
+                        {/*<a href='http://localhost:3001/auth/twitch'><button>Start</button></a>*/}
                         <Column small={12} large={12}><a href='http://localhost:3001/auth/twitch'><button>Start</button></a></Column>
                     </Row>
                 </Container>

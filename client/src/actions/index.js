@@ -1,5 +1,5 @@
 import { AUTH_USER, AUTH_ERROR, INCREMENT_COUNTER, DECREMENT_COUNTER } from './types';
-import axios from 'axios';
+//import axios from 'axios';
 
 
 export const increment = () => {
@@ -45,13 +45,13 @@ export const decrement = () => {
 // };
 
 
-export const signin = (callback) => async dispatch => {
+export const signin = (res, callback) => async dispatch => {
   // By default, actions can only return objects
   // redux thunk allows us to return whatever we want
   // We can dispatch as many actions as we want as we now have access to dispatch
   // We can also make async requests inside of our actions thanks to redux-thunk
   try {
-    const res = await axios.get('/auth/twitch',{headers:{}});
+   // const res = await axios.get('/auth/twitch',{headers:{}});
     // We are getting our token back from res.data.token
     // We want to send this token to our reducer
     console.log(res.data)

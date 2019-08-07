@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Column from "./Column";
 
 const ColorDisplayPanel = function(props){
     let styleClass = "rounded ";
