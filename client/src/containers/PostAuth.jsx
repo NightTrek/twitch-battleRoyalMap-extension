@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import * as actions from './../actions'
+import { connect } from 'react-redux';
 
 
 
@@ -10,17 +10,12 @@ import Column from './../components/Partials/Column';
 import Row from './../components/Partials/Row';
 import ColorDisplayPanel from './../components/Partials/ColorDisplayPanel';
 import Card from "../components/Partials/Card";
+import {signin} from "../actions";
 
 
 class PostAuth extends Component {
     componentDidMount() {
-        let url = window.location.href;
-        console.log(url);                                  //ebzrp9oyr0r8pmt89kkwbn3qveocc6 //LLD3v9d99VyBg4wAZa6EOw2K
-        //http://localhost:3000/auth/twitch/callback?code=ebzrp9oyr0r8pmt89kkwbn3qveocc6&scope=user%3Aread%3Aemail&state=LLD3v9d99VyBg4wAZa6EOw2K
-        let res = {data:{token:url}};
-        actions.signin(res, ()=>{
-            console.log(res.data.token);
-        });
+        this.props.signin()
 
     }
 
@@ -59,5 +54,5 @@ class PostAuth extends Component {
         );
     }
 }
-
-export default PostAuth;
+export default connect(null, { signin })(PostAuth);
+// export default PostAuth;
