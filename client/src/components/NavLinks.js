@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-class Header extends Component {
+class NavLinks extends Component {
   renderLinks(){
     if(this.props.auth) {
       return(
@@ -35,4 +35,4 @@ function mapStateToProps({ auth }) {
   return { auth: auth.authenticated };
 }
 
-export default connect(mapStateToProps, null)(Header);
+export default connect(mapStateToProps, null)(NavLinks);

@@ -1,13 +1,14 @@
 import React from 'react';
 
-import Header from './Header';
+import './App.css'
 
+import NavbarHeader from './NavBarHeader';
 
 
 export default ({ children  }) => {
   return (
-    <div>
-      <Header/>
+    <div style={{height: '100%'}}>
+      <NavbarHeader/>
       {children}
     </div>
   );
