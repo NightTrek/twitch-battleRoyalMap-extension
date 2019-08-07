@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import img from '../Map/FORTNITESEASON10MAP.jpg'
 import axios from "axios";
-import { ScatterChart, Scatter, XAxis, YAxis, ZAxis, Tooltip, Legend, 
+import { ScatterChart, Scatter, XAxis, YAxis, ZAxis,
 } from 'recharts';
 
+const renderSkatterChart =(
 
+)
 
 class Fmap extends Component {
     state  = {
