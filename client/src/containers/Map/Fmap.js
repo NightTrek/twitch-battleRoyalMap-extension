@@ -6,7 +6,14 @@ import {
 } from 'recharts';
 
 const renderSkatterChart = (
-
+    <ScatterChart width={100%} height={100%}
+        margin={{ top: 20, right: 20, bottom: 10, left: 10 }}>
+        <XAxis dataKey="x" name="coords" />
+        <YAxis dataKey="y" name="coords" />
+        <ZAxis dataKey="z" range={[25, 600]} name="bits" />
+        <Scatter name="A school" data={data01} fill="#8884d8" />
+        <Scatter name="B school" data={data02} fill="#82ca9d" />
+    </ScatterChart>
 )
 
 class Fmap extends Component {
