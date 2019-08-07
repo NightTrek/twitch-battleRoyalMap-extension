@@ -48,12 +48,6 @@ try{
 
 // Initialize Express and middlewares
 var app = express();
-app.use(session({secret: SESSION_SECRET, resave: false, saveUninitialized: false}));
-app.use(morgan('combined'));
-app.use(express.static('public'));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(cors());
 
 
 // Override passport profile function to get user profile from Twitch API
@@ -100,7 +94,7 @@ passport.use('twitch', new OAuth2Strategy({
         console.log(profile)
 
         try{
-           let isUser = await User.find({email:profile.data[0].email})
+            let isUser = await User.find({email:profile.data[0].email})
             console.log(`is user is ================================================
         =========== ${isUser} =======================================================`);
             if(isUser == " " || isUser == ""||isUser == null) {
@@ -128,10 +122,20 @@ passport.use('twitch', new OAuth2Strategy({
             console.log(err)
         }
 
-
         done(null, profile);
     }
 ));
+
+
+
+app.use(session({secret: SESSION_SECRET, resave: false, saveUninitialized: false}));
+app.use(morgan('combined'));
+app.use(express.static('public'));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(cors());
+
+
 
 
 // Set route to start OAuth link, this is where you define scopes to request
@@ -143,11 +147,10 @@ app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedire
 
 
 app.get('/auth/user', function (req, res) {
-    if (req.session && req.session.passport && req.session.passport.user) {
-        res.send(req.session.passport.user);
-    } else {
-        res.send("invalid Login")
-    }
+    console.log("i'm hit");
+    const key = Object.keys(req.sessionStore.sessions)[0];
+    const obj = JSON.parse(req.sessionStore.sessions[key])
+    res.send(obj.passport.user);
 });
 
 

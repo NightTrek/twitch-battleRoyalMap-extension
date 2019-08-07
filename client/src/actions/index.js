@@ -17,18 +17,17 @@ export const signin = (res, callback) => async dispatch => {
   // We can dispatch as many actions as we want as we now have access to dispatch
   // We can also make async requests inside of our actions thanks to redux-thunk
   try {
-    const res = await axios.get('http://localhost:3001/auth/user',{headers:{}});
+    const res = await axios.get('http://localhost:3001/auth/user');
     // We are getting our token back from res.data.token
     // We want to send this token to our reducer
     console.log(res.data)
-    // if(res.data == "invalid Login"){
-    //   else
-    // }
-    dispatch({ type: AUTH_USER, payload: res.data.token });
-    localStorage.setItem('token', res.data.token);
+
+    dispatch({ type: AUTH_USER, payload: res.data });
+    localStorage.setItem('token', res.data);
     callback();
   } catch(e) {
-    dispatch({ type: AUTH_ERROR, payload: 'Invalid login credentials' });
+    console.log(e);
+    // dispatch({ type: AUTH_ERROR, payload: 'Invalid login credentials' });
   }
 
 };
