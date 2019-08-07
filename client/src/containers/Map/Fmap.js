@@ -20,10 +20,10 @@ class Fmap extends Component {
         // and recived an updated coordsArray
         try {
             const response = await axios.post('http://localhost:3001/api/SendVote', { posted_data: 'coordsobj' });
-            console.log('👉 Returned data:', response);
+            console.log('Returned data:', response);
           } catch (e) {
             this.setState({currentVote:coordsobj})
-            console.log(`😱 Axios request failed: ${e}`);
+            console.log(`Axios request failed: ${e}`);
           }
     
       }

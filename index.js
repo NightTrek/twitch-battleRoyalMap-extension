@@ -1,33 +1,149 @@
-const express   = require('express');
-const morgan    = require('morgan');
-const mongoose  = require('mongoose');
-const cors      = require('cors');
+// Define our dependencies
+const express        = require('express');
+const session        = require('express-session');
+const passport       = require('passport');
+const OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
+const request        = require('request');
+const axios          = require('axios');
+const morgan         = require('morgan');
+const winston        = require('winston')
+const mongoose       = require('mongoose');
 
-const app = express();
+//local files
+const config         = require("./config");
+const User          = require('./model/User');
+const routes        = require('');
+//
+//======================================================================================
 
-// Database setup
+// Define our constants, you will change these with your own
+const TWITCH_CLIENT_ID = config.clientId;
+const TWITCH_SECRET    = config.clientSecret;
+const SESSION_SECRET   = config.secret;
+const CALLBACK_URL     = 'http://localhost:3000/auth/twitch/callback';  // You can run locally with - http://localhost:3000/auth/twitch/callback
 
-mongoose.connect('mongodb://localhost:auth/auth', { useNewUrlParser: true, useCreateIndex: true });
+const cors = require('cors');
+//start db connection
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    defaultMeta: { service: 'user-service' },
+    transports: [
+        //
+        // - Write to all logs with level `info` and below to `combined.log`
+        // - Write all logs error (and below) to `error.log`.
+        //
+        new winston.transports.File({ filename: 'error.log', level: 'error' }),
+        new winston.transports.File({ filename: 'MasterCombinedLog.log' })
+    ]
+});
 
-// App middlewares setup
+try{
+    mongoose.connect('mongodb://localhost:auth/auth', { useNewUrlParser: true, useCreateIndex: true });
+}catch(err){//
+    console.log(err);
+}
+
+
+// Initialize Express and middlewares
+var app = express();
+app.use(session({secret: SESSION_SECRET, resave: false, saveUninitialized: false}));
 app.use(morgan('combined'));
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.static('public'));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(cors());
 
 
-// If we are in production, serve our clients build folder.
-// This folder is created during production
-if(process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
+// Override passport profile function to get user profile from Twitch API
+OAuth2Strategy.prototype.userProfile = function(accessToken, done) {
+    let options = {
+        url: 'https://api.twitch.tv/helix/users',
+        method: 'GET',
+        headers: {
+            'Client-ID': TWITCH_CLIENT_ID,
+            'Accept': 'application/vnd.twitchtv.v5+json',
+            'Authorization': 'Bearer ' + accessToken
+        }
+    };
+
+    request(options, async function (error, response, body) {
+        if (response && response.statusCode == 200) {
+
+            let axres = await axios.post("http://localhost:3001/auth/storeUser",{data:JSON.parse(body)})
+            done(null, JSON.parse(body));
+        } else {
+            done(JSON.parse(body));
+        }
+    });
 }
 
-// Routes setup
-const routes = require('./routes');
-app.use(routes);
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
 
-// Server setup
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});
+
+passport.use('twitch', new OAuth2Strategy({
+        authorizationURL: 'https://id.twitch.tv/oauth2/authorize',
+        tokenURL: 'https://id.twitch.tv/oauth2/token',
+        clientID: TWITCH_CLIENT_ID,
+        clientSecret: TWITCH_SECRET,
+        callbackURL: CALLBACK_URL,
+        state: true
+    },
+    async function(accessToken, refreshToken, profile, done) {
+        profile.accessToken = accessToken;
+        profile.refreshToken = refreshToken;
+        console.log('================================================================');
+        console.log(profile)
+        let axres = await axios.post("http://localhost:3001/auth/storeUser",{data:JSON.parse(profile)})
+
+        // Securely store user profile in your DB
+        //User.findOrCreate(..., function(err, user) {
+        //  done(err, user);
+        //});
+
+        done(null, profile);
+    }
+));
+
+
+// Set route to start OAuth link, this is where you define scopes to request
+app.get('/auth/twitch', passport.authenticate('twitch', { scope: 'user:read:email' }));
+
+// Set route for OAuth redirect CHANGE THE REDIRECT LINK
+app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedirect: '/auth/storeUser', failureRedirect: '/' }));
+
+
+app.post('/auth/storeUser', (req,res) => {
+    logger.log({
+        level: 'info',
+        message: JSON.stringify(req.body)
+    });
+    console.log(req.body)
+    res.send("success")
+});
+
+
+
+//production setup
+
+// app.post('/auth/')
+// // If we are in production, serve our clients build folder.
+// // This folder is created during production
+if(process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+    logger.add(new winston.transports.Console({
+        format: winston.format.simple()
+    }));
+}
+
+// // Server setup
 const PORT = process.env.PORT || 3001;
 
-
-app.listen(PORT, () => console.log(`Server started on PORT: ${PORT}`));
+app.listen(PORT, function () {
+    console.log('Twitch auth sample listening on port 3000!')
+});
