@@ -29,15 +29,12 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-<<<<<<< HEAD
     "recharts": "^1.6.2",
-    "validator": "^11.1.0"
-=======
+    "validator": "^11.1.0",
     "passport-oauth": "^1.0.0",
     "request": "^2.88.0",
     "validator": "^11.1.0",
     "winston": "^3.2.1"
->>>>>>> 1f0ffe9a4938e5d456b9fc8cdd585dfb6f55eb04
   },
   "devDependencies": {
     "concurrently": "^4.1.1"
