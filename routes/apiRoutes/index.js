@@ -11,10 +11,10 @@ router.route('/StartSession')
     });
 
 router.route('/SendVote')
-    .get((req, res) => {
+    .post((req, res) => {
 
         console.log(req.user);
-        res.send(req.user);
+        res.send([{x:22,y:42,z:5},{x:22,y:42,z:5},{x:22,y:42,z:5},{x:22,y:42,z:5},{x:22,y:42,z:5},{x:22,y:42,z:5},{x:22,y:42,z:5},{x:22,y:42,z:5},{x:22,y:42,z:5},{x:22,y:42,z:5}]);
     });
 
 //http://localhost:3001/api/SendVote

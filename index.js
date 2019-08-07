@@ -69,6 +69,7 @@ OAuth2Strategy.prototype.userProfile = function(accessToken, done) {
 
     request(options, async function (error, response, body) {
         if (response && response.statusCode == 200) {
+
             let axres = await axios.post("http://localhost:3001/auth/storeUser",{data:JSON.parse(body)})
             done(null, JSON.parse(body));
         } else {
@@ -114,24 +115,15 @@ passport.use('twitch', new OAuth2Strategy({
 app.get('/auth/twitch', passport.authenticate('twitch', { scope: 'user:read:email' }));
 
 // Set route for OAuth redirect CHANGE THE REDIRECT LINK
-app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedirect: '/', failureRedirect: '/' }));
+app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedirect: '/auth/storeUser', failureRedirect: '/' }));
 
 
 app.post('/auth/storeUser', (req,res) => {
     logger.log({
         level: 'info',
-        message: JSON.stringify(req.session)
+        message: JSON.stringify(req.body)
     });
-    console.log(req.session)
-    res.send("success")
-});
-
-app.post('/auth/storeUser', (req,res) => {
-    logger.log({
-        level: 'info',
-        message: JSON.stringify(req.session)
-    });
-    console.log(req.session)
+    console.log(req.body)
     res.send("success")
 });
 
