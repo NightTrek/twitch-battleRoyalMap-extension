@@ -1,8 +1,9 @@
 import React from 'react';
-
 import './SideDrawer.css';
+import NavLinks from '../../NavLinks';
 
 const sideDrawer = props => {
+    
     let drawerClasses = 'side-drawer';
     if (props.show) {
         drawerClasses = 'side-drawer open';
@@ -14,7 +15,7 @@ const sideDrawer = props => {
                 <li> USER NAME</li>
                 <li><a href="/">MAP</a></li>
                 <li><a href="/">STREAMER</a></li>
-                <li><a href="/signin">LOG IN</a></li>
+                <li><NavLinks /></li>
             </ul>
         </nav>
     );

@@ -2,37 +2,42 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import Toolbar from './Partials/Toolbar';
+import SideDrawer from './Partials/SideDrawer/SideDrawer';
+import Backdrop from './Backdrop/Backdrop';
+import "./Welcome.css";
+
 class NavBarHeader extends Component {
-  renderLinks(){
-    if(this.props.auth) {
-      return(
-        <div>
-          <Link to='/signout'>Sign out</Link>
-          <Link to='/feature'>Feature</Link>
-          <Link to='/todo'>Todo</Link>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <Link to='/signup'>Sign up</Link>
-          <Link to='/signin'>Sign in</Link>
-        </div>
-      );
+  state = {
+    sideDrawerOpen: false
+};
+
+drawerToggleClickHandler = () => {
+    this.setState((prevState) => {
+        return {sideDrawerOpen: !prevState.sideDrawerOpen};
+    });
+};
+
+backdropClickHandler =() => {
+    this.setState({sideDrawerOpen: false});
+};
+
+render() {
+    let backdrop;
+
+    if (this.state.sideDrawerOpen) {
+        backdrop = <Backdrop click={this.backdropClickHandler}/>;
     }
-  }
-  render() {
-    return (
-      <div>
-        <Link to='/'>Redux Auth</Link>
-        {this.renderLinks()}
+    console.log(this.props);
+    return(
+      <div style={{height: '100%'}} className={"bg-info"}>
+      <Toolbar drawerClickHandler={this.drawerToggleClickHandler}/>
+      <SideDrawer show={this.state.sideDrawerOpen}/>
+      {backdrop}
       </div>
-    );
-  }
+        );
+    }
 }
 
-function mapStateToProps({ auth }) {
-  return { auth: auth.authenticated };
-}
 
-export default connect(mapStateToProps, null)(NavBarHeader);
+export default NavBarHeader;
