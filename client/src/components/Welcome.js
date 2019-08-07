@@ -16,7 +16,7 @@ class Welcome extends Component {
 
         console.log(this.props);
         return(
-            <div>
+            <div className={"bg-info"}>
                 {/*<NavBar>*/}
                 <Container>
                     <Row><h1>Vote your Landing BattleRoyal </h1></Row>

@@ -30,8 +30,8 @@ ReactDOM.render(
     <Router>
       <App>
         <Route exact path='/' component={Welcome}/>
-        <Route exact path='/signin' component={Signin}/>
-        <Route exact path='/signout' component={Signout}/>
+        {/*<Route exact path='/signin' component={Signin}/>*/}
+        {/*<Route exact path='/signout' component={Signout}/>*/}
           {/*<Route exact path='/Counter' component={Counter}/>*/}
           <Route path='/auth/twitch/callback'component={Counter}/>
         {/*<Route exact path='/fmap' component={Fmap}/>*/}
