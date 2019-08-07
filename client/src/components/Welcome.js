@@ -6,18 +6,41 @@ import { connect } from 'react-redux';
 
 //import react components
 // import navbar from 'navbar'
+import Toolbar from './Partials/Toolbar';
+import SideDrawer from './Partials/SideDrawer/SideDrawer';
+import Backdrop from './Backdrop/Backdrop';
+import "./Welcome.css";
 import Container from './Partials/Container';
 import Column from './Partials/Column';
 import Row from './Partials/Row';
 import ColorDisplayPanel from './Partials/ColorDisplayPanel';
 class Welcome extends Component {
+    state = {
+        sideDrawerOpen: false
+    };
+    
+    drawerToggleClickHandler = () => {
+        this.setState((prevState) => {
+            return {sideDrawerOpen: !prevState.sideDrawerOpen};
+        });
+    };
+
+    backdropClickHandler =() => {
+        this.setState({sideDrawerOpen: false});
+    };
 
     render() {
+        let backdrop;
 
+        if (this.state.sideDrawerOpen) {
+            backdrop = <Backdrop click={this.backdropClickHandler}/>;
+        }
         console.log(this.props);
         return(
-            <div>
-                {/*<NavBar>*/}
+            <div style={{height: '100%'}}>
+                <Toolbar drawerClickHandler={this.drawerToggleClickHandler}/>
+                <SideDrawer show={this.state.sideDrawerOpen}/>
+                {backdrop}
                 <Container>
                     <Row><h1>Vote your Landing BattleRoyal </h1></Row>
                     <Row>
