@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
-import img from '../Map/FORTNITESEASON10MAP.jpg'
+import img from '../Map/FORTNITESEASON10MAP.jpg';
+import {VictoryScatter} from 'victory';
 import axios from "axios";
 // var CanvasJSReact = require('./canvasjs.react');
 // var CanvasJS = CanvasJSReact.CanvasJS;
 // var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
+const startingData = [{ x: 1, y: 2, amount: 30 },
+    { x: 2, y: 3, amount: 40 },
+    { x: 3, y: 5, amount: 25 },
+    { x: 4, y: 4, amount: 10 },
+    { x: 5, y: 7, amount: 45 }];
 
 
 class Fmap extends Component {
@@ -11,55 +18,57 @@ class Fmap extends Component {
         coordsArray: [],
         currentVote: {}
     }
+
     async showCoords(event) {
-        console.log(event.clientX,event.clientY,)
-        let clickCoords = { x: event.clientX, y: event.clientY, z: Math.random }
+        console.log(event.clientX, event.clientY,)
+        let clickCoords = {x: event.clientX, y: event.clientY, z: Math.random}
         //  var coords = "X coords: " + x + ", Y coords: " + y + "Z" + z ;
         // document.getElementById("demo ").innerHTML = coords;
 
         //POST API CALL TO BACKEND which sends a Coord Object {x float, y float, weight int}
         // and recived an updated coordsArray
         try {
-            const response = await axios.post('http://localhost:3001/api/SendVote', { clickCoords: '' });
+            const response = await axios.post('http://localhost:3001/api/SendVote', {clickCoords: ''});
             console.log('Returned data:', response);
         } catch (e) {
-            this.setState({ currentVote: clickCoords })
+            this.setState({currentVote: clickCoords})
             console.log(`Axios request failed: ${e}`);
         }
 
     }
 
+//transparent or rgba(0, 0, 0, 0)
     render() {
         return (
             <div>
-                <div id="mappy" onClick={this.showCoords}>
-                    <img style={{ width: '100%', height: '100%' }} src={img} />
+                <div  id="mappy" onClick={this.showCoords}>
+                    <img style={{width: '90%', height: '90%',position:"absolute", top:"75px", left:"60px"}} src={img}/>
+                        <VictoryScatter
+                            style={{ data: { fill: "#c43a31", position:"absolute" } }}
+                            bubbleProperty="amount"
+                            maxBubbleSize={25}
+                            minBubbleSize={5}
+                            data={[
+                                { x: 1, y: 2, amount: 30 },
+                                { x: 2, y: 3, amount: 40 },
+                                { x: 3, y: 5, amount: 25 },
+                                { x: 4, y: 4, amount: 10 },
+                                { x: 5, y: 7, amount: 45 }]} ></VictoryScatter>
+
+
                 </div>
-    
-    
+
+
             </div>
         );
     }
 
 
-
- 
 }
-// import React, { Component } from 'react';
-
-// class Fmap extends Component {
-//     render() {
-//         return (
-//             <div>
-                
-//             </div>
-//         );
-//     }
-// }
 
 export default Fmap;
 //     render() {
-       
+
 // 		const options = {
 //             backgroundColor: "transparent",
 // 			animationEnabled: true,
@@ -91,7 +100,7 @@ export default Fmap;
 // 					{ label: "Neptune", x: 2794, y: 48, z: 30200 },
 // 				]
 //             }]
-           
+
 // 		}
 // 		return (
 // 		<div id="chartcontainer" style={{height: "1000px", width: "100%", backgroundImage: ('https://files.slack.com/files-pri/TH7BS1571-FLZLVBW64/fortniteseason10map.jpg')}}>
@@ -102,4 +111,4 @@ export default Fmap;
 // 		</div>
 // 		);
 // 	}
-export default Fmap;
+// export default Fmap;
