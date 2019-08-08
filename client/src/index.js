@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './components/App';
 import Welcome from './components/Welcome';
 import PostAuth from "./containers/PostAuth";
-
+import Fmap from './containers/Map/Fmap'
 
 import reducers from './reducers';
 // configure redux dev tools
@@ -31,6 +31,7 @@ ReactDOM.render(
         <Route exact path='/' component={Welcome}/>
         {/*  <Route exact path='/Counter' component={Counter}/>*/}
           <Route exact path='/auth/success'component={PostAuth}/>
+          <Route exact path='/map'component={Fmap}/>
         {/*<Route exact path='/fmap' component={Fmap}/>*/}
       </App>
     </Router>
