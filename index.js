@@ -123,7 +123,8 @@ app.use(express.static('public'));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
-
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 
 
@@ -141,6 +142,9 @@ app.get('/auth/user', function (req, res) {
     const obj = JSON.parse(req.sessionStore.sessions[key])
     res.send(obj.passport.user);
 });
+
+
+app.use(routes);
 
 
 
