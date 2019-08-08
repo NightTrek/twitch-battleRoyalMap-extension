@@ -36,6 +36,7 @@ class PostAuth extends Component {
         let ValidSessionID = await axios.post('http://localhost:3001/api/validsession', {sessionId:this.state.joinSessionID});
         console.log(ValidSessionID);
         if(ValidSessionID !== "error invalid session"){
+            localStorage.setItem('SessionID', ValidSessionID);
             this.props.history.push('/fmap');
         }else{
             this.setState({joinSessionID:"INVALID SESSION ID"});
@@ -52,6 +53,7 @@ class PostAuth extends Component {
         let theNewSession = await axios.post('http://localhost:3001/api/startsession', {data:{email:this.props.auth,VoidTime:this.state.newSessionTime}});
         console.log(theNewSession);
         if(theNewSession !== "error invalid session"){
+            localStorage.setItem('SessionID', theNewSession['_id']);
             this.props.history.push('/fmap');
         }else{
             this.setState({joinSessionID:"INVALID SESSION ID"});
