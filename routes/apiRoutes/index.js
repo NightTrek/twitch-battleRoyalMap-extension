@@ -10,7 +10,7 @@ const logger         = require('../../logs/Wlogger');
 //StartMap Session
 router.route('/startsession')
     .post(async (req, res) => {
-        console.log(req.body.data.email)
+        console.log(req.body.data)
         if(req.body.data.email){
             try{
                 let Profile = await User.find({email:req.body.data.email});
@@ -46,9 +46,10 @@ router.route('/startsession')
 router.route('/validsession')
     .post(async (req, res) => {
         if(req.body.sessionId){
+            console.log('Validator HIT');
             try {
                 let CurrentVotes = await Session.find({_id: req.body.sessionId});
-                console.log(CurrentVotes[0].userId)
+                //console.log(CurrentVotes)
                 // if(CurrentVotes[0).userId
                 res.send(CurrentVotes[0].userId);
             }catch(err){
@@ -56,7 +57,7 @@ router.route('/validsession')
                     level: 'error',
                     message: "ERROR INVALID sessionID UNDEFINED " + err
                 });
-                res.send("error invalid session")
+                res.send("error invalid session ID")
             }
         }
         else{
