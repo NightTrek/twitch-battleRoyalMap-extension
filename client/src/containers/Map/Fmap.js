@@ -41,6 +41,23 @@ class Fmap extends Component {
         );
     }
 
+
+
+ 
+}
+// import React, { Component } from 'react';
+
+// class Fmap extends Component {
+//     render() {
+//         return (
+//             <div>
+                
+//             </div>
+//         );
+//     }
+// }
+
+export default Fmap;
 //     render() {
        
 // 		const options = {
@@ -85,7 +102,4 @@ class Fmap extends Component {
 // 		</div>
 // 		);
 // 	}
-
- 
-}
 export default Fmap;
