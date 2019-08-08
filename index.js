@@ -138,15 +138,21 @@ app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedire
 
 app.get('/auth/user', function (req, res) {
     console.log("Auth hit");
-    const key = Object.keys(req.sessionStore.sessions)[0];
-    // console.log(req.sessionStore);
-    console.log(key);
-    // if(!key) {
+    try{
+        const key = Object.keys(req.sessionStore.sessions)[0];
+        // console.log(req.sessionStore);
+        console.log(key);
         const obj = JSON.parse(req.sessionStore.sessions[key]);
         res.send(obj.passport.user);
-    // }else{
-    //     res.render('/auth/twitch');
-    // }
+    }catch(err){
+        logger.log({
+            level: 'error',
+            message: "/auth/user ERROR "+err
+        });
+        res.send("error 500 auth order error mostlikly check loggs for details")
+        console.log(err);
+    }
+
 });
 
 

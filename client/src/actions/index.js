@@ -1,4 +1,4 @@
-import { AUTH_USER, AUTH_ERROR, INCREMENT_COUNTER, DECREMENT_COUNTER } from './types';
+import { AUTH_USER, INCREMENT_COUNTER, DECREMENT_COUNTER } from './types';
 import axios from 'axios';
 
 

@@ -11,31 +11,35 @@ import Column from './../components/Partials/Column';
 import Row from './../components/Partials/Row';
 
 
-let That = {};
-
 class PostAuth extends Component {
-    state = {
-        joinSessionID:"",
-        newSessionTime:""
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            joinSessionID:"",
+            newSessionTime:""
+        };
+
+        this.sessionValidHandler = this.sessionValidHandler.bind(this);
+        this.startSessionHandler = this.startSessionHandler.bind(this);
+        this.validateSession = this.validateSession.bind(this);
+        this.startNewSession = this.startNewSession.bind(this);
     }
     componentDidMount() {
         this.props.signin()
-
-        //     "",()=>{
-        //     // this.props.history.push('/');
-        // });
     }
 
+
+
     sessionValidHandler(event){
-            let newState = {joinSessionID: event.target.value,
-            newSessionTime:this.state.newSessionTime};
+            let newState = {joinSessionID: event.target.value};
             this.setState(newState);
     }
 
     async validateSession(){
         let ValidSessionID = await axios.post('http://localhost:3001/api/validsession', {sessionId:this.state.joinSessionID});
         console.log(ValidSessionID);
-        if(ValidSessionID !== "error invalid session"){
+        if(ValidSessionID.data !== "error invalid session"){
             localStorage.setItem('SessionID', ValidSessionID);
             this.props.history.push('/fmap');
         }else{
@@ -44,17 +48,16 @@ class PostAuth extends Component {
     }
 
     startSessionHandler(event){
-        let newState = {joinSessionID:this.state.joinSessionID,
-            newSessionTime:event.target.value};
+        let newState = {newSessionTime:event.target.value};
         this.setState(newState);
     }
 
     async startNewSession(){
         let theNewSession = await axios.post('http://localhost:3001/api/startsession', {data:{email:this.props.auth,VoidTime:this.state.newSessionTime}});
         console.log(theNewSession);
-        if(theNewSession !== "error invalid session"){
+        if(theNewSession.data !== "error invalid session"){
             localStorage.setItem('SessionID', theNewSession['_id']);
-            this.props.history.push('/fmap');
+            //this.props.history.push('/fmap');
         }else{
             this.setState({joinSessionID:"INVALID SESSION ID"});
         }
