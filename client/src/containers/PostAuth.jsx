@@ -73,7 +73,7 @@ class PostAuth extends Component {
                     </Row>
                     <Row>
                         <Column small={12} large={6} medium={6}>
-                            <div>
+                            <div className="startSession">
                                 <h5>Start A session</h5>
                                 <p>Pick how long you want the vote to go for!</p>
                                 <label>Number Of seconds till vote ends </label>
@@ -83,7 +83,7 @@ class PostAuth extends Component {
 
                         </Column>
                         <Column small={12} large={6} medium={6}>
-                            <div>
+                            <div className="joinSession">
                             <h5>Join A session</h5>
                             <p>Input your session id here</p>
                             <input type={"text"} value={this.state.joinSessionID} onChange={this.sessionValidHandler}></input>

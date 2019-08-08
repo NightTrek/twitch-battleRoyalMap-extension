@@ -15,10 +15,10 @@ state = {
     axios
       .get("http://localhost:3001/auth/user")
       .then(response =>
-        response.data.results.map(user => ({
-          name: `${user.display_name}`,
-          email: `${user.email}`,
-          image: `${user.profile_img_url}`
+        response.data.results.map(profile => ({
+          name: `${profile.data[0].display_name}`,
+          email: `${profile.data[0].email}`,
+          image: `${profile.data[0].profile_img_url}`
         }))
       )
       .then(users => {
