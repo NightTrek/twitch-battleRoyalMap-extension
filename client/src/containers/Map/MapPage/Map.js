@@ -5,8 +5,10 @@ import Row from '../../../components/Partials/Partials/Row';
 import ColorDisplayPanel from '../../../components/Partials/Partials/ColorDisplayPanel';
 import Fmap from '../Fmap';
 import { connect } from 'net';
+import * as actions from './../actions';
 // access token, email, code 
 class Map extends Component {
+    
     componentDidMount() {
         // going to look for session id if no session is found return to post auth
         // this.props.state()
