@@ -7,7 +7,6 @@ import SlideImages from './Slideimages/Slideimages'
 //import react components
 
 // import navbar from 'navbar'
-
 import Column from './Partials/Column';
 import Row from './Partials/Row';
 import { Jumbotron, Container, Button} from 'reactstrap';

@@ -5,7 +5,7 @@ import axios from 'axios';
 
 
 //import react components
-
+import '../containers/PostAuth.css'
 import Container from './../components/Partials/Container';
 import Column from './../components/Partials/Column';
 import Row from './../components/Partials/Row';
@@ -62,7 +62,7 @@ class PostAuth extends Component {
 
     render() {
         return (
-            <div>
+            <div className="PostAuthC">
                 <Container>
                     <Row><h1>Pick your journey either start a vote or join a session</h1></Row>
                     <Row>

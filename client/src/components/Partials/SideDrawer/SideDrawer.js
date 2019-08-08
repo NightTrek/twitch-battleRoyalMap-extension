@@ -14,6 +14,7 @@ const sideDrawer = props => {
             <ul>
                 <Userinfo />
                 <li> USER NAME</li>
+                <li><a href="/">Home</a></li>
                 <li><a href="/">MAP</a></li>
                 <li><a href="/">STREAMER</a></li>
                 <li><NavLinks /></li>
