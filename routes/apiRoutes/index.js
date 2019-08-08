@@ -45,10 +45,11 @@ router.route('/startsession')
 router.route('/validsession')
     .post(async (req, res) => {
         if(req.body.sessionId){
+            console.log
             let CurrentVotes = await Session.find({_id:req.body.sessionId});
-            console.log(CurrentVotes.userId)
-            // if(CurrentVotes)
-            res.send(CurrentVotes.userId);
+            console.log(CurrentVotes[0].userId)
+            // if(CurrentVotes[0).userId
+            res.send(CurrentVotes[0].userId);
         }
         else{
             res.send("error invalid session")
