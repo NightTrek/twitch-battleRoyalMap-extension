@@ -41,6 +41,20 @@ router.route('/startsession')
         }
     });
 
+//Session Validate
+router.route('/validsession')
+    .post(async (req, res) => {
+        if(req.body.sessionId){
+            let CurrentVotes = await Session.find({_id:req.body.sessionId});
+            console.log(CurrentVotes.userId)
+            // if(CurrentVotes)
+            res.send(CurrentVotes.userId);
+        }
+        else{
+            res.send("error invalid session")
+        }
+    });
+
 
 
 
