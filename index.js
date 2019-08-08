@@ -137,10 +137,16 @@ app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedire
 
 
 app.get('/auth/user', function (req, res) {
-    console.log("i'm hit");
+    console.log("Auth hit");
     const key = Object.keys(req.sessionStore.sessions)[0];
-    const obj = JSON.parse(req.sessionStore.sessions[key])
-    res.send(obj.passport.user);
+    // console.log(req.sessionStore);
+    console.log(key);
+    // if(!key) {
+        const obj = JSON.parse(req.sessionStore.sessions[key]);
+        res.send(obj.passport.user);
+    // }else{
+    //     res.render('/auth/twitch');
+    // }
 });
 
 
