@@ -15,7 +15,8 @@ router.route('/startsession')
             try{
                 let Profile = await User.find({email:req.body.data.email});
                 console.log(Profile);
-                let newSession = await Session.create({userId:Profile[0]._id,sessionVoidTime:req.body.data.voidTime,voteArray:[]});
+                console.log(req.body.VoidTime)
+                let newSession = await Session.create({userId:Profile[0]._id,sessionVoidTime:req.body.data.VoidTime,voteArray:[]});
                 res.send(newSession)
                 logger.log({
                     level: 'info',
@@ -45,10 +46,18 @@ router.route('/startsession')
 router.route('/validsession')
     .post(async (req, res) => {
         if(req.body.sessionId){
-            let CurrentVotes = await Session.find({_id:req.body.sessionId});
-            console.log(CurrentVotes[0].userId)
-            // if(CurrentVotes[0).userId
-            res.send(CurrentVotes[0].userId);
+            try {
+                let CurrentVotes = await Session.find({_id: req.body.sessionId});
+                console.log(CurrentVotes[0].userId)
+                // if(CurrentVotes[0).userId
+                res.send(CurrentVotes[0].userId);
+            }catch(err){
+                logger.log({
+                    level: 'error',
+                    message: "ERROR INVALID sessionID UNDEFINED " + err
+                });
+                res.send("error invalid session")
+            }
         }
         else{
             res.send("error invalid session")
