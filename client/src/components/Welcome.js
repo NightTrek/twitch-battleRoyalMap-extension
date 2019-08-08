@@ -29,8 +29,6 @@ class Welcome extends Component {
                                 Streamers can request their viewers vote on where to land all on a live map of the votes.
                                     Our Advanced algorithms weights those votes and comes up with an single point to land.
                                     Viewers can pay streamers with bits to make their vote come on top! </p>
-                        <a className ="btn_start" href='http://localhost:3001/auth/twitch'><Button outline color="primary">Push button to start</Button>{' '}</a>
-  
                         </Column>
                         <Column small={12} large={6}>
                                 <h5>Current Games Supported</h5>
@@ -44,6 +42,9 @@ class Welcome extends Component {
                                 </ul>
                         </Column>
                     </Row>
+                        <Row>
+                            <a style={{width:"5000px",height:"200px"}} className ="btn_start" href='http://localhost:3001/auth/twitch'><Button style={{width:"500px",height:"150px"}} outline color="primary">Push button to start</Button>{' '}</a>
+                        </Row>
                         {/*<a href='http://localhost:3001/auth/twitch'><button>Start</button></a>*/}
                     <Row>
                         <SlideImages />

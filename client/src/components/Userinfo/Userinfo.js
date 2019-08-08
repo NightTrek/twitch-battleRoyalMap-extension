@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+// import axios from "axios";
 import { connect } from 'react-redux';
 
 
@@ -11,27 +11,32 @@ state = {
     errors: null
   };
 
-  getUsers() {
-    axios
-      .get("http://localhost:3001/auth/user")
-      .then(response =>
-        response.data.results.map(profile => ({
-          name: `${profile.data[0].display_name}`,
-          email: `${profile.data[0].email}`,
-          image: `${profile.data[0].profile_img_url}`
-        }))
-      )
-      .then(users => {
-        this.setState({
-          users,
-          isLoading: false
-        });
-      })
-      .catch(error => this.setState({ error, isLoading: false }));
-  }
-
+  // getUsers() {
+  //   axios
+  //     .get("http://localhost:3001/auth/user")
+  //     .then(response =>
+  //       response.data.results.map(profile => ({
+  //         name: `${profile.data[0].display_name}`,
+  //         email: `${profile.data[0].email}`,
+  //         image: `${profile.data[0].profile_img_url}`
+  //       }))
+  //     )
+  //     .then(users => {
+  //       this.setState({
+  //         users,
+  //         isLoading: false
+  //       });
+  //     })
+  //     .catch(error => this.setState({ error, isLoading: false }));
+  // }
+  //
   componentDidMount() {
-    this.getUsers();
+    // console.log(this.props.auth.data[0].login)
+      // const User = {
+    //     namel: ,
+    //     email: ,
+    //     IMG: ,
+    // }
   }
 
   render() {
@@ -42,14 +47,14 @@ state = {
         <div>
           {!isLoading ? (
             users.map(user => {
-              const { name, email, image } = user;
+              // const { name, email, image } = user;
               return (
                 <div>
-                  <p>{name}</p>
+                  <p>{this.props.auth.data[0].login}</p>
                   <div>
-                    <img src={image} alt={name} />
+                    <img src={this.props.auth.data[0].profile_image_url} alt={"profilepic"} />
                   </div>
-                  <p>{email}</p>
+                  <p>{this.props.auth.data[0].email}</p>
                   <hr />
                 </div>
               );

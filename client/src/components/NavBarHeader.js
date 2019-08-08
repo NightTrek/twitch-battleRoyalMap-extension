@@ -45,3 +45,4 @@ function mapStateToProps(state){
 }
 
 export default connect(mapStateToProps, actions)(NavBarHeader);
+// export default NavBarHeader;

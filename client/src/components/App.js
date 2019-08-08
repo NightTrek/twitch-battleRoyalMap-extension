@@ -7,7 +7,7 @@ import NavbarHeader from './NavBarHeader';
 
 export default ({ children  }) => {
   return (
-    <div>
+    <div style={{backgroundColor: "#92a8d1"}}>
       <NavbarHeader/>
       {children}
     </div>

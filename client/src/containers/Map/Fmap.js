@@ -41,7 +41,7 @@ class Fmap extends Component {
     render() {
         return (
             <div>
-                <div  id="mappy" onClick={this.showCoords}>
+                <div   id="mappy" onClick={this.showCoords}>
                     <img style={{width: '90%', height: '90%',position:"absolute", top:"75px", left:"60px"}} src={img}/>
                         <VictoryScatter
                             style={{ data: { fill: "#c43a31", position:"absolute" } }}
