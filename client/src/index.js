@@ -32,7 +32,7 @@ ReactDOM.render(
         {/*  <Route exact path='/Counter' component={Counter}/>*/}
           <Route exact path='/auth/success'component={PostAuth}/>
           <Route exact path='/map'component={Fmap}/>
-        {/*<Route exact path='/fmap' component={Fmap}/>*/}
+        <Route exact path='/fmap' component={Fmap}/>
       </App>
     </Router>
   </Provider>

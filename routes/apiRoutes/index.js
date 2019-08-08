@@ -45,7 +45,6 @@ router.route('/startsession')
 router.route('/validsession')
     .post(async (req, res) => {
         if(req.body.sessionId){
-            console.log
             let CurrentVotes = await Session.find({_id:req.body.sessionId});
             console.log(CurrentVotes[0].userId)
             // if(CurrentVotes[0).userId

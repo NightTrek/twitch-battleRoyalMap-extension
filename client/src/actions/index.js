@@ -26,6 +26,7 @@ export const signin = (res, callback) => async dispatch => {
     localStorage.setItem('token', res.data);
     callback();
   } catch(e) {
+    // callback()
     console.log(e);
     // dispatch({ type: AUTH_ERROR, payload: 'Invalid login credentials' });
   }
