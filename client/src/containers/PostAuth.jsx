@@ -19,9 +19,11 @@ class PostAuth extends Component {
         newSessionTime:""
     }
     componentDidMount() {
-        this.props.signin("",()=>{
-            // this.props.history.push('/');
-        });
+        this.props.signin()
+
+        //     "",()=>{
+        //     // this.props.history.push('/');
+        // });
     }
 
     sessionValidHandler(event){

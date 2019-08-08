@@ -11,7 +11,7 @@ export const decrement = () => {
 };
 
 
-export const signin = (res, callback) => async dispatch => {
+export const signin = () => async dispatch => {
   // By default, actions can only return objects
   // redux thunk allows us to return whatever we want
   // We can dispatch as many actions as we want as we now have access to dispatch
@@ -24,7 +24,7 @@ export const signin = (res, callback) => async dispatch => {
 
     dispatch({ type: AUTH_USER, payload: res.data });
     localStorage.setItem('token', res.data);
-    callback();
+    // callback();
   } catch(e) {
     // callback()
     console.log(e);
