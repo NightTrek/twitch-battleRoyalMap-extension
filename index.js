@@ -6,7 +6,8 @@ const OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 const request        = require('request');
 const axios          = require('axios');
 const morgan         = require('morgan');
-const winston        = require('winston')
+const winston        = require('winston');
+const logger         = require('./logs/Wlogger');
 const mongoose       = require('mongoose');
 
 //local files
@@ -24,19 +25,7 @@ const CALLBACK_URL     = 'http://localhost:3001/auth/twitch/callback';  // You c
 
 const cors = require('cors');
 //start db connection
-const logger = winston.createLogger({
-    level: 'info',
-    format: winston.format.json(),
-    defaultMeta: { service: 'user-service' },
-    transports: [
-        //
-        // - Write to all logs with level `info` and below to `combined.log`
-        // - Write all logs error (and below) to `error.log`.
-        //
-        new winston.transports.File({ filename: 'error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'MasterCombinedLog.log' })
-    ]
-});
+
 
 try{
     mongoose.connect('mongodb://localhost:twitch/vote-your-landing', { useNewUrlParser: true, useCreateIndex: true });
@@ -47,7 +36,7 @@ try{
 
 
 // Initialize Express and middlewares
-var app = express();
+let app = express();
 
 
 // Override passport profile function to get user profile from Twitch API
@@ -134,8 +123,6 @@ app.use(express.static('public'));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
 
 
 
@@ -156,9 +143,6 @@ app.get('/auth/user', function (req, res) {
 });
 
 
-app.use(routes);
-
-
 
 //production setup
 
@@ -176,5 +160,5 @@ if(process.env.NODE_ENV === 'production') {
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, function () {
-    console.log(`Twitch auth sample listening on port ${PORT}`);
+    console.log(`Twitch auth sample listening on port ${PORT}`)
 });
