@@ -1,5 +1,7 @@
 import React from "react";
 import axios from "axios";
+import { connect } from 'react-redux';
+
 
 class Userinfo extends React.Component  {
 
@@ -61,4 +63,8 @@ state = {
   }
 }
 
-export default Userinfo;
+function mapStateToProps(state){
+    return { auth: state.auth.authenticated }
+}
+export default connect(mapStateToProps, null)(Userinfo);
+// export default PostAuth;
