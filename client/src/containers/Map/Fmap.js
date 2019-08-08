@@ -15,7 +15,7 @@ class Fmap extends Component {
         console.log(event.clientX,event.clientY,)
         let clickCoords = { x: event.clientX, y: event.clientY, z: Math.random }
         //  var coords = "X coords: " + x + ", Y coords: " + y + "Z" + z ;
-        // document.getElementById("demo").innerHTML = coords;
+        // document.getElementById("demo ").innerHTML = coords;
 
         //POST API CALL TO BACKEND which sends a Coord Object {x float, y float, weight int}
         // and recived an updated coordsArray
