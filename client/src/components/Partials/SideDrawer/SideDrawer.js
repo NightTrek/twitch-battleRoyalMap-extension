@@ -12,6 +12,7 @@ const sideDrawer = props => {
     return (
         <nav className= {drawerClasses}>
             <ul>
+                
                 <li> USER NAME</li>
                 <li><a href="/">MAP</a></li>
                 <li><a href="/">STREAMER</a></li>
