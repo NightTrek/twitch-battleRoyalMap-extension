@@ -1,5 +1,22 @@
 .container {
-    margin-left: 400px;
-    margin-top: 80px;
+    margin-top: 70px;
     background-color: white;
+}
+
+.jumbomain {
+    padding-top: 4x;
+    text-align: center !important;
+}
+
+.row {
+    margin-top: 40px;
+}
+
+.toast {
+    width: 400px;
+}
+
+.btn_start {
+    display: flex;
+    justify-content: center;
 }
