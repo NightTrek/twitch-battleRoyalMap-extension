@@ -35,16 +35,11 @@ class Fmap extends Component {
                 <div id="mappy" onClick={this.showCoords}>
                     <img style={{ width: '100%', height: '100%' }} src={img} />
                 </div>
-                
-               
+    
+    
             </div>
         );
     }
-
-// //      <br/> //Just so that JSFiddle's Result label doesn't overlap the Chart
-// // <div id="chartContainer" style="height: 100%; width: 100%;
-// //  background-image:url('https://www.mapsofindia.com/worldmap/map-of-world.jpg');">
-// //  </div>
 
 //     render() {
        

@@ -6,7 +6,8 @@ const OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 const request        = require('request');
 const axios          = require('axios');
 const morgan         = require('morgan');
-const winston        = require('winston')
+const winston        = require('winston');
+const logger         = require('./logs/Wlogger');
 const mongoose       = require('mongoose');
 
 //local files
@@ -24,19 +25,7 @@ const CALLBACK_URL     = 'http://localhost:3001/auth/twitch/callback';  // You c
 
 const cors = require('cors');
 //start db connection
-const logger = winston.createLogger({
-    level: 'info',
-    format: winston.format.json(),
-    defaultMeta: { service: 'user-service' },
-    transports: [
-        //
-        // - Write to all logs with level `info` and below to `combined.log`
-        // - Write all logs error (and below) to `error.log`.
-        //
-        new winston.transports.File({ filename: 'error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'MasterCombinedLog.log' })
-    ]
-});
+
 
 try{
     mongoose.connect('mongodb://localhost:twitch/vote-your-landing', { useNewUrlParser: true, useCreateIndex: true });
@@ -47,13 +36,7 @@ try{
 
 
 // Initialize Express and middlewares
-var app = express();
-app.use(session({secret: SESSION_SECRET, resave: false, saveUninitialized: false}));
-app.use(morgan('combined'));
-app.use(express.static('public'));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(cors());
+let app = express();
 
 
 // Override passport profile function to get user profile from Twitch API
@@ -100,7 +83,7 @@ passport.use('twitch', new OAuth2Strategy({
         console.log(profile)
 
         try{
-           let isUser = await User.find({email:profile.data[0].email})
+            let isUser = await User.find({email:profile.data[0].email})
             console.log(`is user is ================================================
         =========== ${isUser} =======================================================`);
             if(isUser == " " || isUser == ""||isUser == null) {
@@ -128,10 +111,21 @@ passport.use('twitch', new OAuth2Strategy({
             console.log(err)
         }
 
-
         done(null, profile);
     }
 ));
+
+
+
+app.use(session({secret: SESSION_SECRET, resave: false, saveUninitialized: false}));
+app.use(morgan('combined'));
+app.use(express.static('public'));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 
 
 // Set route to start OAuth link, this is where you define scopes to request
@@ -143,14 +137,28 @@ app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedire
 
 
 app.get('/auth/user', function (req, res) {
-    if (req.session && req.session.passport && req.session.passport.user) {
-        res.send(req.session.passport.user);
-    } else {
-        res.send("invalid Login")
+    console.log("Auth hit");
+    try{
+        const key = Object.keys(req.sessionStore.sessions)[0];
+        // console.log(req.sessionStore);
+        console.log(key);
+        const obj = JSON.parse(req.sessionStore.sessions[key]);
+        res.send(obj.passport.user);
+    }catch(err){
+        logger.log({
+            level: 'error',
+            message: "/auth/user ERROR "+err
+        });
+        res.send("error 500 auth order error mostlikly check loggs for details")
+        console.log(err);
     }
+
 });
 
 
+app.use(routes);
+
+//
 
 //production setup
 
@@ -168,5 +176,5 @@ if(process.env.NODE_ENV === 'production') {
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, function () {
-    console.log('Twitch auth sample listening on port 3000!')
+    console.log(`Twitch auth sample listening on port ${PORT}`)
 });

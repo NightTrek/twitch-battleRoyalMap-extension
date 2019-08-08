@@ -7,16 +7,16 @@ class NavLinks extends Component {
     if(this.props.auth) {
       return(
         <div>
-          <Link to='/signout'>Sign out</Link>
-          <Link to='/feature'>Feature</Link>
-          <Link to='/todo'>Todo</Link>
+          <Link to='/signout'></Link>
+          <Link to='/feature'></Link>
+          <Link to='/todo'></Link>
         </div>
       );
     } else {
       return (
         <div>
-          <Link to='/signup'>Sign up</Link>
-          <Link to='/signin'>Sign in</Link>
+          <Link to='/signup'></Link>
+          <Link to='/signin'></Link>
         </div>
       );
     }
@@ -24,7 +24,7 @@ class NavLinks extends Component {
   render() {
     return (
       <div>
-        <Link to='/'>Redux Auth</Link>
+        <Link to='/'></Link>
         {this.renderLinks()}
       </div>
     );
