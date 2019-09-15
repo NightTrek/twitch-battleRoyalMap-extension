@@ -11,9 +11,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './components/App';
 import Welcome from './components/Welcome';
 import PostAuth from "./containers/PostAuth";
-import Fmap from './containers/Map/Fmap'
-
+import Map from "./containers/Map/Map";
 import reducers from './reducers';
+
+
+
 // configure redux dev tools
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -29,10 +31,8 @@ ReactDOM.render(
     <Router>
       <App>
         <Route exact path='/' component={Welcome}/>
-        {/*  <Route exact path='/Counter' component={Counter}/>*/}
-          <Route exact path='/auth/success'component={PostAuth}/>
-          <Route exact path='/map'component={Fmap}/>
-        <Route exact path='/fmap' component={Fmap}/>
+        <Route exact path='/auth/success'component={PostAuth}/>
+        <Route exact path='/fmap' component={Map}/>
       </App>
     </Router>
   </Provider>

@@ -150,7 +150,7 @@ app.get('/auth/user', function (req, res) {
             message: "/auth/user ERROR "+err
         });
         res.send("error 500 auth order error mostlikly check loggs for details")
-        console.log(err);
+        console.log(err);//
     }
 
 });
