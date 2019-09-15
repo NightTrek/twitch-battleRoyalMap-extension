@@ -7,7 +7,7 @@ class NavLinks extends Component {
     if(this.props.auth) {
       return(
         <div>
-          <Link to='/signout'></Link>
+          <Link to='/fmap'></Link>
           <Link to='/feature'></Link>
           <Link to='/todo'></Link>
         </div>
