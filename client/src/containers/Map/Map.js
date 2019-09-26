@@ -16,20 +16,18 @@ class Map extends Component {
         return (
             <div>
                 <Container>
-                    <Row>
-                        <br/>
-                    </Row>
-                    <Row>
-                        <Column small={12} large={6} offset_lg={6}>
-                            <div>
-                                <Fmap />
-                            </div>
-                        </Column>
-                    </Row>
-                    <Row>
-                        <hr/>
-                    </Row>
-
+                    {/*<Row>*/}
+                    {/*    <br/>*/}
+                    {/*</Row>*/}
+                    {/*<Row>*/}
+                    {/*    <Column small={12} large={6} offset_lg={6}>*/}
+                    {/*            <Fmap />*/}
+                    {/*    </Column>*/}
+                    {/*</Row>*/}
+                    {/*<Row>*/}
+                    {/*    <hr/>*/}
+                    {/*</Row>*/}
+                    <Fmap/>
                 </Container>
             </div>
         );
