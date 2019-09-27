@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-// import img from '../Map/FORTNITESEASON10MAP.jpg';
 // import {VictoryScatter} from 'victory';
-import axios from "axios";
+// import axios from "axios";
 import fortniteMap from "../../img/FORTNITESEASON10MAP.jpg"
 
 // const startingData = [{ x: 1, y: 2, amount: 30 },
@@ -10,40 +9,123 @@ import fortniteMap from "../../img/FORTNITESEASON10MAP.jpg"
 //     { x: 4, y: 4, amount: 10 },
 //     { x: 5, y: 7, amount: 45 }];
 
+let trackTransforms = function(ctx, component){
+    let svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
+    let xform = svg.createSVGMatrix();
+    console.log(xform);
+    ctx.getTransform = function(){ return xform; };
+
+    let savedTransforms = [];
+    let save = ctx.save;
+    ctx.save = function(){
+        savedTransforms.push(xform.translate(0,0));
+        return save.call(ctx);
+    };
+
+    let restore = ctx.restore;
+    ctx.restore = function(){
+        xform = savedTransforms.pop();
+        return restore.call(ctx);
+    };
+
+    let scale = ctx.scale;
+    ctx.scale = function(sx,sy){
+        xform = xform.scaleNonUniform(sx,sy);
+        return scale.call(ctx,sx,sy);
+    };
+
+    let rotate = ctx.rotate;
+    ctx.rotate = function(radians){
+        xform = xform.rotate(radians*180/Math.PI);
+        return rotate.call(ctx,radians);
+    };
+
+    let translate = ctx.translate;
+    ctx.translate = function(dx,dy){
+        console.log(`translate x: ${dx} || y: ${dy} || `);
+        xform = xform.translate(dx,dy);
+        return translate.call(ctx,dx,dy);
+    };
+
+    let transform = ctx.transform;
+    ctx.transform = function(a,b,c,d,e,f){
+        let m2 = svg.createSVGMatrix();
+        m2.a=a; m2.b=b; m2.c=c; m2.d=d; m2.e=e; m2.f=f;
+        xform = xform.multiply(m2);
+        return transform.call(ctx,a,b,c,d,e,f);
+    };
+
+    let setTransform = ctx.setTransform;
+    ctx.setTransform = function(a,b,c,d,e,f){
+        xform.a = a;
+        xform.b = b;
+        xform.c = c;
+        xform.d = d;
+        xform.e = e;
+        xform.f = f;
+        return setTransform.call(ctx,a,b,c,d,e,f);
+    };
+
+    let pt  = svg.createSVGPoint();
+
+    ctx.transformedPoint = function(x,y){
+        pt.x=x; pt.y=y;
+        return pt.matrixTransform(xform.inverse());
+    }
+};
+
+
+
 
 class Fmap extends Component {
     constructor(props){
         super(props);
+        const canvas = this.refs.canvas;
+        let mapIMG = new Image();
+        mapIMG.src = fortniteMap;
+        mapIMG.width = 20;
         this.state = {
             coordsArray: [],
             currentVote: {},
-            currentMap:{},
+            currentMap: mapIMG,
             canvasRef:{},
             canvas:{},
-            lastX:0,
+            lastX: 0,
             lastY:0,
-            dragged:{},
-            dragStart:{},
-            scaleFactor:1.1
-        }
+            dragged:false,
+            dragStart:null,
+            scaleFactor:1.1,
+            savedTransforms:[],
+            imgCoords: {x:0,y:0}
+        };
 
         this.mouseDown = this.mouseDown.bind(this);
         this.mouseMove = this.mouseMove.bind(this);
         this.mouseUp = this.mouseUp.bind(this);
         this.handleScroll = this.handleScroll.bind(this);
 
+
     }
 
 
     componentDidMount(props) {
-        this.trackTransforms(this.state.canvasRef);
+        const canvas = this.refs.canvas;
+        const ctx = canvas.getContext('2d');
+        trackTransforms(ctx, this);
         this.updateCanvas();
-        // this.setState({}, {})
+        let currentState = this.state;
+        currentState.canvasRef = ctx;
+        currentState.canvas = canvas;
+        currentState.lastX = canvas.width/2;
+        currentState.lastY = canvas.height/2;
+        this.setState(currentState);
 
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        this.trackTransforms(this.state.canvasRef);
+        // this.trackTransforms(this.state.canvasRef, this);
         this.updateCanvas();
+        // console.log("component updated heres the new state");
+        // console.log(this.state);
     }
 
     updateCanvas(){
@@ -51,35 +133,20 @@ class Fmap extends Component {
         //https://www.kempsterrrr.xyz/handling-scroll-events-in-react/
         const canvas = this.refs.canvas;
         const ctx = canvas.getContext('2d');
-        const img = this.refs.image;
-        img.onload = () => {
-
-            // Clear the entire canvas
+            // Clear the entire canvas//
             let p1 = ctx.transformedPoint(0,0);
-            let p2 = ctx.transformedPoint(this.canvas.width, this.canvas.height);
+            //console.log("Updating Canvas inside the onLoad function");
+            let p2 = ctx.transformedPoint(canvas.width, canvas.height);
             ctx.clearRect(p1.x,p1.y,p2.x-p1.x,p2.y-p1.y);
 
             ctx.save();
             ctx.setTransform(1,0,0,1,0,0);
-            ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
+            ctx.clearRect(0,0, canvas.width, canvas.height);
             ctx.restore();
 
-            ctx.drawImage(this.currentMap,0,0);
+            ctx.drawImage(this.state.currentMap,0,0, canvas.width, canvas.height);
 
-            this.setState((prevState, props) => {
-                return {
-                    coordsArray: prevState.coordsArray,
-                    currentVote: prevState.currentVote,
-                    currentMap: img,
-                    canvasRef:ctx,
-                    canvas:canvas,
-                    lastX: canvas.width/2,
-                    lastY:canvas.height/2,
-                    dragged:{},
-                    dragStart:{}
-                };
-            });
-        }
+
 
     }
 
@@ -88,69 +155,47 @@ class Fmap extends Component {
         document.body.style.mozUserSelect = document.body.style.webkitUserSelect = document.body.style.userSelect = 'none';
         let newlastX = evt.offsetX || (evt.pageX - this.state.canvas.offsetLeft);
         let newlastY = evt.offsetY || (evt.pageY - this.state.canvas.offsetTop);
-        let newdragStart = this.state.canvasRef.transformedPoint(this.state.lastX, this.state.lastY);
-        this.setState((prevState, props) => {
-            return {
-                coordsArray:    prevState.coordsArray,
-                currentVote:    prevState.currentVote,
-                currentMap:     prevState.currentMap,
-                canvasRef:      prevState.canvasRef,
-                canvas:         prevState.canvas,
-                lastX:          newlastX,
-                lastY:          newlastY,
-                dragged:        false,
-                dragStart:      newdragStart,
-                scaleFactor:    prevState.scale
-            };
-        });
+        let newdragStart = this.state.canvasRef.transformedPoint(newlastX, newlastY);
+        let currentState = this.state;
+        currentState.dragged = false;
+        currentState.lastX = newlastX;
+        currentState.lastY = newlastY;
+        currentState.dragStart = newdragStart;
+        this.setState(currentState);
         console.log(this.state);
     }
 
     mouseMove(evt) {
-
+        console.log("mouse move event");
         let newlastX = evt.offsetX || (evt.pageX - this.state.canvas.offsetLeft);
         let newlastY = evt.offsetY || (evt.pageY - this.state.canvas.offsetTop);
         if (this.state.dragStart){
             let pt = this.state.canvasRef.transformedPoint(newlastX,newlastY);
-            this.state.canvasRef.translate(pt.x-this.state.dragStart.x,pt.y-this.state.dragStart.y);
+            let xT = pt.x-this.state.dragStart.x;
+            let yT = pt.y-this.state.dragStart.y;
+            this.state.canvasRef.translate(xT, yT);
             this.updateCanvas();
         }
-        this.setState((prevState, props) => {
-            return {
-                coordsArray:    prevState.coordsArray,
-                currentVote:    prevState.currentVote,
-                currentMap:     prevState.currentMap,
-                canvasRef:      prevState.canvasRef,
-                canvas:         prevState.canvas,
-                lastX:          newlastX,
-                lastY:          newlastY,
-                dragged:        true,
-                dragStart:      prevState.dragStart,
-                scaleFactor:    prevState.scale
-            };
-        });
+        let currentState = this.state;
+        currentState.dragged = true;
+        currentState.lastX = newlastX;
+        currentState.lastY = newlastY;
+        this.setState(currentState);
     }
 
     mouseUp(evt){
-        this.setState((prevState, props) => {
-            return {
-                coordsArray:    prevState.coordsArray,
-                currentVote:    prevState.currentVote,
-                currentMap:     prevState.currentMap,
-                canvasRef:      prevState.canvasRef,
-                canvas:         prevState.canvas,
-                lastX:          prevState.lastX,
-                lastY:          prevState.lastY,
-                dragged:        false,
-                dragStart:      prevState.dragStart,
-                scaleFactor:    prevState.scale
-            };
-        });
+        console.log("mouse up ")
+        let currentState = this.state;
+        currentState.dragged = false;
+        currentState.dragStart = null;
+        this.setState(currentState);
+        console.log(this.state);
         let dragged = this.state.dragged;
-        if (!dragged) this.zoom(evt.shiftKey ? -1 : 1 );
+       if (!dragged) this.zoom(evt.shiftKey ? -1 : 1 );
     }
 
     zoom(clicks){
+        console.log('zoom');
         let pt = this.state.canvasRef.transformedPoint(this.state.lastX,this.state.lastY);
         this.state.canvasRef.translate(pt.x,pt.y);
         let factor = Math.pow(this.state.scaleFactor,clicks);
@@ -160,72 +205,13 @@ class Fmap extends Component {
     }
 
     handleScroll(evt){
+        console.log("handle Scoll");
         let delta = evt.wheelDelta ? evt.wheelDelta/40 : evt.detail ? -evt.detail : 0;
         if (delta) this.zoom(delta);
         return evt.preventDefault() && false;
     }
 
-    trackTransforms(ctx){
-        let svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
-        let xform = svg.createSVGMatrix();
-        ctx.getTransform = function(){ return xform; };
 
-        let savedTransforms = [];
-        let save = ctx.save;
-        ctx.save = function(){
-            savedTransforms.push(xform.translate(0,0));
-            return save.call(ctx);
-        };
-
-        let restore = ctx.restore;
-        ctx.restore = function(){
-            xform = savedTransforms.pop();
-            return restore.call(ctx);
-        };
-
-        let scale = ctx.scale;
-        ctx.scale = function(sx,sy){
-            xform = xform.scaleNonUniform(sx,sy);
-            return scale.call(ctx,sx,sy);
-        };
-
-        let rotate = ctx.rotate;
-        ctx.rotate = function(radians){
-            xform = xform.rotate(radians*180/Math.PI);
-            return rotate.call(ctx,radians);
-        };
-
-        let translate = ctx.translate;
-        ctx.translate = function(dx,dy){
-            xform = xform.translate(dx,dy);
-            return translate.call(ctx,dx,dy);
-        };
-
-        let transform = ctx.transform;
-        ctx.transform = function(a,b,c,d,e,f){
-            let m2 = svg.createSVGMatrix();
-            m2.a=a; m2.b=b; m2.c=c; m2.d=d; m2.e=e; m2.f=f;
-            xform = xform.multiply(m2);
-            return transform.call(ctx,a,b,c,d,e,f);
-        };
-
-        let setTransform = ctx.setTransform;
-        ctx.setTransform = function(a,b,c,d,e,f){
-            xform.a = a;
-            xform.b = b;
-            xform.c = c;
-            xform.d = d;
-            xform.e = e;
-            xform.f = f;
-            return setTransform.call(ctx,a,b,c,d,e,f);
-        };
-
-        let pt  = svg.createSVGPoint();
-        ctx.transformedPoint = function(x,y){
-            pt.x=x; pt.y=y;
-            return pt.matrixTransform(xform.inverse());
-        }
-    }
 
 
 
@@ -261,8 +247,9 @@ class Fmap extends Component {
         return (
             <div>
                 <canvas ref="canvas" width={800} height={800}
-                        onMouseDown={this.mouseDown} onMouseUp={this.mouseUp} onMouseMove={this.mouseMove} />
-                <img ref={"image"} src={fortniteMap} style={{display:"none"}} alt={"Battle Royal Map Fortnite"}/>
+                        onMouseDown={this.mouseDown} onMouseUp={this.mouseUp}
+                        onMouseMove={this.mouseMove} onScroll={this.handleScroll}/>
+                <img ref={"image"} src={fortniteMap} width={200} style={{display:"none"}} alt={"Battle Royal Map Fortnite"}/>
             </div>
         );
     }
