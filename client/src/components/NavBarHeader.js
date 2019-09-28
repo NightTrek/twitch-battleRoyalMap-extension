@@ -9,14 +9,35 @@ import "./Welcome.css";
 import * as actions from "../actions";
 
 class NavBarHeader extends Component {
-  state = {
-    sideDrawerOpen: false
-};
+    constructor(props){
+        super(props);
+        this.state = {
+            sideDrawerOpen: false,
+            auth:null
 
-drawerToggleClickHandler = () => {
-    this.setState((prevState) => {
-        return {sideDrawerOpen: !prevState.sideDrawerOpen};
-    });
+        };
+    }
+
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+      this.mapUserInfoToState(prevProps,prevState);
+  }
+
+    mapUserInfoToState(props, prevState){
+      console.log(prevState.auth);
+      if(prevState.auth == null && props.auth.data){
+          console.log("maping auth to state");
+          let currentState = this.state;
+          currentState.auth = props.auth.data[0];
+          this.setState(currentState);
+      }
+
+  }
+
+drawerToggleClickHandler = (props) => {
+    let currentState = this.state;
+    currentState.sideDrawerOpen = !this.state.sideDrawerOpen;
+    this.setState(currentState);
 };
 
 backdropClickHandler =() => {
@@ -29,11 +50,11 @@ render() {
     if (this.state.sideDrawerOpen) {
         backdrop = <Backdrop click={this.backdropClickHandler}/>;
     }
-    console.log(this.props);
+    // console.log(this.props);
     return(
       <div style={{height: '100%'}} className={"bg-info"}>
       <Toolbar drawerClickHandler={this.drawerToggleClickHandler}/>
-      <SideDrawer show={this.state.sideDrawerOpen}/>
+      <SideDrawer show={this.state.sideDrawerOpen} userData={this.state.auth}/>
       {backdrop}
       </div>
         );

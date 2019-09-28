@@ -8,6 +8,7 @@ const logger         = require('../../logs/Wlogger');
 //api appended
 
 //StartMap Session
+//Start session takes data obj with an "email" "VoidTime" and returns a Session "_id" created by adding a new DB entry
 router.route('/startsession')
     .post(async (req, res) => {
         console.log(req.body.data)
@@ -43,13 +44,14 @@ router.route('/startsession')
     });
 
 //Session Validate
+
 router.route('/validsession')
     .post(async (req, res) => {
         if(req.body.sessionId){
             console.log('Validator HIT');
             try {
                 let CurrentVotes = await Session.find({_id: req.body.sessionId});
-                //console.log(CurrentVotes)
+                console.log(CurrentVotes)
                 // if(CurrentVotes[0).userId
                 res.send(CurrentVotes[0].userId);
             }catch(err){

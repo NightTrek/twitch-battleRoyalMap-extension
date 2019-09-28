@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import axios from "axios";
 import moment from "moment";
 import fortniteMap from "../../img/FORTNITESEASON10MAP.jpg"
+import {connect} from "react-redux";
+import * as actions from "../../actions";
 
 const startingData = [{ x: 0, y: 0, amount: 30 },
     { x: 50, y: 55, amount: 40 },
@@ -84,10 +86,20 @@ class Fmap extends Component {
         const canvas = this.refs.canvas;
         let mapIMG = new Image();
         mapIMG.src = fortniteMap;
+         let currentSessionID, currentVoteArray;
+        if(props.sessionID && props.voteArray){
+            currentSessionID = props.sessionID;
+            currentVoteArray = props.voteArray;
+        }else{
+            currentVoteArray = startingData;
+            currentSessionID = "agasdfaegasdgae";
+        }
+
 
         this.state = {
-            sessionId:props.sessionID,
-            coordsArray: startingData,
+            sessionId:currentSessionID,
+            auth:null,
+            coordsArray: currentVoteArray,
             currentVote: {},
             voted:false,
             currentMap: mapIMG,
@@ -123,11 +135,23 @@ class Fmap extends Component {
         currentState.lastY = canvas.height/2;
         this.setState(currentState);
         this.updateCanvas();
+        this.mapUserInfoToState(this.props, this.state);
+        // console.log(this.state.auth);
         console.log("component mounted");
 
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.updateCanvas();
+    }
+    mapUserInfoToState(props, prevState){
+        // console.log(prevState.auth);
+        if(prevState.auth == null && props.auth.data){
+            console.log("maping auth to state");
+            let currentState = this.state;
+            currentState.auth = props.auth.data[0];
+            this.setState(currentState);
+        }
+
     }
 
     updateCanvas(){
@@ -183,7 +207,7 @@ class Fmap extends Component {
         // console.log("mouse move event");
         let newlastX = evt.offsetX || (evt.pageX - this.state.canvas.offsetLeft);
         let newlastY = evt.offsetY || (evt.pageY - this.state.canvas.offsetTop);
-        console.log(`offsetX ${evt.pageX - this.state.canvas.offsetLeft} offsetY ${evt.pageY - this.state.canvas.offsetTop}  pageX ${evt.pageX} pageY ${evt.pageY} `);
+        // console.log(`offsetX ${evt.pageX - this.state.canvas.offsetLeft} offsetY ${evt.pageY - this.state.canvas.offsetTop}  pageX ${evt.pageX} pageY ${evt.pageY} `);
         let currentState = this.state;
         // if (this.state.dragStart){
         //     let pt = this.state.canvasRef.transformedPoint(newlastX,newlastY);
@@ -255,9 +279,10 @@ class Fmap extends Component {
         //POST API CALL TO BACKEND which sends a Coord Object {x float, y float, weight int}
         // and recived an updated coordsArray
         try {
+            console.log(this.state.sessionId);
             const response = await axios.post('http://localhost:3001/api/SendVote', {data:{
-                    email:"danielthespy@gmail.com",
-                    sessionId: "5d4e005c005ab1312b8593d8",
+                    email:this.state.auth.email,
+                    sessionId: this.state.sessionId,
                     vote:vote,
                     timestamp: moment().unix()
                 }});
@@ -291,4 +316,10 @@ class Fmap extends Component {
 
 }
 
-export default Fmap;
+function mapStateToProps(state){
+    return { auth: state.auth.authenticated }
+}
+
+export default connect(mapStateToProps, actions)(Fmap);
+
+// export default Fmap;
