@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import {VictoryScatter} from 'victory';
-// import axios from "axios";
+import axios from "axios";
+import moment from "moment";
 import fortniteMap from "../../img/FORTNITESEASON10MAP.jpg"
 
 const startingData = [{ x: 0, y: 0, amount: 30 },
@@ -111,7 +112,7 @@ class Fmap extends Component {
     }
 
 
-    componentDidMount(props) {
+    async componentDidMount(props) {
         const canvas = this.refs.canvas;
         const ctx = canvas.getContext('2d');
         trackTransforms(ctx, this);
@@ -173,7 +174,7 @@ class Fmap extends Component {
         currentState.lastX = newlastX;
         currentState.lastY = newlastY;
         currentState.dragStart = newdragStart;
-        currentState.currentVote = {x:(evt.pageX - this.state.canvas.offsetLeft)+this.state.imgCoords.x, y:(evt.pageY - this.state.canvas.offsetTop)+this.state.imgCoords.y};
+        currentState.currentVote = {x:(evt.pageX - this.state.canvas.offsetLeft)+this.state.imgCoords.x, y:(evt.pageY - this.state.canvas.offsetTop)+this.state.imgCoords.y, z:1};
         this.setState(currentState);
         // console.log(this.state);
     }
@@ -192,7 +193,7 @@ class Fmap extends Component {
         //     currentState.imgCoords = {x:this.state.imgCoords.x+xT,y:this.state.imgCoords.y+yT};
         //     this.updateCanvas();
         // }
-        currentState.currentVote = {x:(evt.pageX - this.state.canvas.offsetLeft), y:(evt.pageY - this.state.canvas.offsetTop)};
+        currentState.currentVote = {x:(evt.pageX - this.state.canvas.offsetLeft), y:(evt.pageY - this.state.canvas.offsetTop), z:1};
         currentState.dragged = true;
         currentState.lastX = newlastX;
         currentState.lastY = newlastY;
@@ -228,10 +229,18 @@ class Fmap extends Component {
         return evt.preventDefault() && false;
     }
 
-    doubleClick(evt){
+    async doubleClick(evt){
         let currentState = this.state;
         currentState.voted = true;
-        currentState.coordsArray.push(currentState.currentVote);
+
+        try{
+            let response = await this.showCoords(currentState.currentVote);
+            console.log(response);
+            currentState.coordsArray = response.voteArray;
+        }
+        catch(err){
+            console.log(err);
+        }
         this.setState(currentState);
     }
 
@@ -242,29 +251,28 @@ class Fmap extends Component {
 
 
 
-    async showCoords(event) {
-        console.log(event.clientX, event.clientY,);
-        let clickCoords = {x: event.clientX, y: event.clientY, z: Math.random}
-        //  let coords = "X coords: " + x + ", Y coords: " + y + "Z" + z ;
-        // document.getElementById("demo ").innerHTML = coords;
-
+    async showCoords(vote) {
         //POST API CALL TO BACKEND which sends a Coord Object {x float, y float, weight int}
         // and recived an updated coordsArray
-        // try {
-        //     const response = await axios.post('http://localhost:3001/api/SendVote', {data:{
-        //             email:"danielthespy@gmail.com",
-        //             sessionId: "5d4e005c005ab1312b8593d8",
-        //             vote:{
-        //                 x:"42",
-        //                 y:"42",
-        //                 z:"3"
-        //             }
-        //         }});
-        //     console.log('Returned data:', response);
-        // } catch (e) {
-        //     this.setState({currentVote: clickCoords})
-        //     console.log(`Axios request failed: ${e}`);
-        // }
+        try {
+            const response = await axios.post('http://localhost:3001/api/SendVote', {data:{
+                    email:"danielthespy@gmail.com",
+                    sessionId: "5d4e005c005ab1312b8593d8",
+                    vote:vote,
+                    timestamp: moment().unix()
+                }});
+            return new Promise((pass,fail) => {
+                if(response){
+                    // console.log('Returned data:', response);
+                    pass(response.data);
+                }else{
+                    fail(response);
+                }
+            })
+        } catch (e) {
+
+            console.log(`Axios request failed: ${e}`);
+        }
 
     }
 
