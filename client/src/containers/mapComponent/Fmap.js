@@ -3,16 +3,16 @@ import React, { Component } from 'react';
 // import axios from "axios";
 import fortniteMap from "../../img/FORTNITESEASON10MAP.jpg"
 
-// const startingData = [{ x: 1, y: 2, amount: 30 },
-//     { x: 2, y: 3, amount: 40 },
-//     { x: 3, y: 5, amount: 25 },
-//     { x: 4, y: 4, amount: 10 },
-//     { x: 5, y: 7, amount: 45 }];
+const startingData = [{ x: 0, y: 0, amount: 30 },
+    { x: 50, y: 55, amount: 40 },
+    { x: 95, y: 85, amount: 25 },
+    { x: 152, y: 120, amount: 10 },
+    { x: 250, y: 220, amount: 45 }];
 
 let trackTransforms = function(ctx, component){
     let svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
     let xform = svg.createSVGMatrix();
-    console.log(xform);
+    // console.log(xform);
     ctx.getTransform = function(){ return xform; };
 
     let savedTransforms = [];
@@ -42,7 +42,7 @@ let trackTransforms = function(ctx, component){
 
     let translate = ctx.translate;
     ctx.translate = function(dx,dy){
-        console.log(`translate x: ${dx} || y: ${dy} || `);
+        // console.log(`translate x: ${dx} || y: ${dy} || `);
         xform = xform.translate(dx,dy);
         return translate.call(ctx,dx,dy);
     };
@@ -83,13 +83,12 @@ class Fmap extends Component {
         const canvas = this.refs.canvas;
         let mapIMG = new Image();
         mapIMG.src = fortniteMap;
-        mapIMG.width = 20;
         this.state = {
-            coordsArray: [],
+            coordsArray: startingData,
             currentVote: {},
             currentMap: mapIMG,
             canvasRef:{},
-            canvas:{},
+            canvas:canvas,
             lastX: 0,
             lastY:0,
             dragged:false,
@@ -112,20 +111,18 @@ class Fmap extends Component {
         const canvas = this.refs.canvas;
         const ctx = canvas.getContext('2d');
         trackTransforms(ctx, this);
-        this.updateCanvas();
         let currentState = this.state;
         currentState.canvasRef = ctx;
         currentState.canvas = canvas;
         currentState.lastX = canvas.width/2;
         currentState.lastY = canvas.height/2;
         this.setState(currentState);
+        this.updateCanvas();
+        console.log("component mounted");
 
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        // this.trackTransforms(this.state.canvasRef, this);
         this.updateCanvas();
-        // console.log("component updated heres the new state");
-        // console.log(this.state);
     }
 
     updateCanvas(){
@@ -146,6 +143,12 @@ class Fmap extends Component {
 
             ctx.drawImage(this.state.currentMap,0,0, canvas.width, canvas.height);
 
+            ctx.fillStyle = "#ff0000";
+            this.state.coordsArray.map( (item)=>{
+                ctx.fillRect(item.x, item.y,10,10);
+            })
+        ctx.fillRect(this.state.currentVote.x, this.state.currentVote.y,5,5);
+
 
 
     }
@@ -161,12 +164,13 @@ class Fmap extends Component {
         currentState.lastX = newlastX;
         currentState.lastY = newlastY;
         currentState.dragStart = newdragStart;
+        currentState.currentVote = {x:evt.pageX- this.state.canvas.offsetLeft, y:evt.pageY - this.state.canvas.offsetTop};
         this.setState(currentState);
-        console.log(this.state);
+        // console.log(this.state);
     }
 
     mouseMove(evt) {
-        console.log("mouse move event");
+        // console.log("mouse move event");
         let newlastX = evt.offsetX || (evt.pageX - this.state.canvas.offsetLeft);
         let newlastY = evt.offsetY || (evt.pageY - this.state.canvas.offsetTop);
         if (this.state.dragStart){
@@ -189,9 +193,9 @@ class Fmap extends Component {
         currentState.dragged = false;
         currentState.dragStart = null;
         this.setState(currentState);
-        console.log(this.state);
-        let dragged = this.state.dragged;
-       if (!dragged) this.zoom(evt.shiftKey ? -1 : 1 );
+        // console.log(this.state);
+       //  let dragged = this.state.dragged;
+       // if (!dragged) this.zoom(evt.shiftKey ? -1 : 1 );
     }
 
     zoom(clicks){
@@ -217,7 +221,7 @@ class Fmap extends Component {
 
 
     async showCoords(event) {
-        console.log(event.clientX, event.clientY,)
+        console.log(event.clientX, event.clientY,);
         let clickCoords = {x: event.clientX, y: event.clientY, z: Math.random}
         //  let coords = "X coords: " + x + ", Y coords: " + y + "Z" + z ;
         // document.getElementById("demo ").innerHTML = coords;
@@ -248,8 +252,7 @@ class Fmap extends Component {
             <div>
                 <canvas ref="canvas" width={800} height={800}
                         onMouseDown={this.mouseDown} onMouseUp={this.mouseUp}
-                        onMouseMove={this.mouseMove} onScroll={this.handleScroll}/>
-                <img ref={"image"} src={fortniteMap} width={200} style={{display:"none"}} alt={"Battle Royal Map Fortnite"}/>
+                         />
             </div>
         );
     }
