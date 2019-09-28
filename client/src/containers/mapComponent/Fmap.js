@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 // import {VictoryScatter} from 'victory';
-// import axios from "axios";
+import axios from "axios";
+import moment from "moment";
 import fortniteMap from "../../img/FORTNITESEASON10MAP.jpg"
+import {connect} from "react-redux";
+import * as actions from "../../actions";
 
 const startingData = [{ x: 0, y: 0, amount: 30 },
     { x: 50, y: 55, amount: 40 },
@@ -83,9 +86,22 @@ class Fmap extends Component {
         const canvas = this.refs.canvas;
         let mapIMG = new Image();
         mapIMG.src = fortniteMap;
+         let currentSessionID, currentVoteArray;
+        if(props.sessionID && props.voteArray){
+            currentSessionID = props.sessionID;
+            currentVoteArray = props.voteArray;
+        }else{
+            currentVoteArray = startingData;
+            currentSessionID = "agasdfaegasdgae";
+        }
+
+
         this.state = {
-            coordsArray: startingData,
+            sessionId:currentSessionID,
+            auth:null,
+            coordsArray: currentVoteArray,
             currentVote: {},
+            voted:false,
             currentMap: mapIMG,
             canvasRef:{},
             canvas:canvas,
@@ -102,12 +118,13 @@ class Fmap extends Component {
         this.mouseMove = this.mouseMove.bind(this);
         this.mouseUp = this.mouseUp.bind(this);
         this.handleScroll = this.handleScroll.bind(this);
+        this.doubleClick = this.doubleClick.bind(this);
 
 
     }
 
 
-    componentDidMount(props) {
+    async componentDidMount(props) {
         const canvas = this.refs.canvas;
         const ctx = canvas.getContext('2d');
         trackTransforms(ctx, this);
@@ -118,11 +135,23 @@ class Fmap extends Component {
         currentState.lastY = canvas.height/2;
         this.setState(currentState);
         this.updateCanvas();
+        this.mapUserInfoToState(this.props, this.state);
+        // console.log(this.state.auth);
         console.log("component mounted");
 
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.updateCanvas();
+    }
+    mapUserInfoToState(props, prevState){
+        // console.log(prevState.auth);
+        if(prevState.auth == null && props.auth.data){
+            console.log("maping auth to state");
+            let currentState = this.state;
+            currentState.auth = props.auth.data[0];
+            this.setState(currentState);
+        }
+
     }
 
     updateCanvas(){
@@ -147,8 +176,13 @@ class Fmap extends Component {
             this.state.coordsArray.map( (item)=>{
                 ctx.fillRect(item.x, item.y,10,10);
             })
-        ctx.fillRect(this.state.currentVote.x, this.state.currentVote.y,5,5);
-
+        if(this.state.voted){
+            ctx.fillStyle = "#00ff45";
+            ctx.fillRect(this.state.currentVote.x+this.state.imgCoords.x, this.state.currentVote.y+this.state.imgCoords.y,25,25);
+        }else {
+            ctx.fillStyle = "#00ff45";
+            ctx.fillRect(this.state.currentVote.x + this.state.imgCoords.x, this.state.currentVote.y + this.state.imgCoords.y, 5, 5);
+        }
 
 
     }
@@ -164,7 +198,7 @@ class Fmap extends Component {
         currentState.lastX = newlastX;
         currentState.lastY = newlastY;
         currentState.dragStart = newdragStart;
-        currentState.currentVote = {x:evt.pageX- this.state.canvas.offsetLeft, y:evt.pageY - this.state.canvas.offsetTop};
+        currentState.currentVote = {x:(evt.pageX - this.state.canvas.offsetLeft)+this.state.imgCoords.x, y:(evt.pageY - this.state.canvas.offsetTop)+this.state.imgCoords.y, z:1};
         this.setState(currentState);
         // console.log(this.state);
     }
@@ -173,18 +207,22 @@ class Fmap extends Component {
         // console.log("mouse move event");
         let newlastX = evt.offsetX || (evt.pageX - this.state.canvas.offsetLeft);
         let newlastY = evt.offsetY || (evt.pageY - this.state.canvas.offsetTop);
-        if (this.state.dragStart){
-            let pt = this.state.canvasRef.transformedPoint(newlastX,newlastY);
-            let xT = pt.x-this.state.dragStart.x;
-            let yT = pt.y-this.state.dragStart.y;
-            this.state.canvasRef.translate(xT, yT);
-            this.updateCanvas();
-        }
+        // console.log(`offsetX ${evt.pageX - this.state.canvas.offsetLeft} offsetY ${evt.pageY - this.state.canvas.offsetTop}  pageX ${evt.pageX} pageY ${evt.pageY} `);
         let currentState = this.state;
+        // if (this.state.dragStart){
+        //     let pt = this.state.canvasRef.transformedPoint(newlastX,newlastY);
+        //     let xT = pt.x-this.state.dragStart.x;
+        //     let yT = pt.y-this.state.dragStart.y;
+        //     this.state.canvasRef.translate(xT, yT);
+        //     currentState.imgCoords = {x:this.state.imgCoords.x+xT,y:this.state.imgCoords.y+yT};
+        //     this.updateCanvas();
+        // }
+        currentState.currentVote = {x:(evt.pageX - this.state.canvas.offsetLeft), y:(evt.pageY - this.state.canvas.offsetTop), z:1};
         currentState.dragged = true;
         currentState.lastX = newlastX;
         currentState.lastY = newlastY;
         this.setState(currentState);
+        this.updateCanvas();
     }
 
     mouseUp(evt){
@@ -215,34 +253,51 @@ class Fmap extends Component {
         return evt.preventDefault() && false;
     }
 
+    async doubleClick(evt){
+        let currentState = this.state;
+        currentState.voted = true;
+
+        try{
+            let response = await this.showCoords(currentState.currentVote);
+            console.log(response);
+            currentState.coordsArray = response.voteArray;
+        }
+        catch(err){
+            console.log(err);
+        }
+        this.setState(currentState);
+    }
 
 
 
 
 
-    async showCoords(event) {
-        console.log(event.clientX, event.clientY,);
-        let clickCoords = {x: event.clientX, y: event.clientY, z: Math.random}
-        //  let coords = "X coords: " + x + ", Y coords: " + y + "Z" + z ;
-        // document.getElementById("demo ").innerHTML = coords;
 
+
+
+    async showCoords(vote) {
         //POST API CALL TO BACKEND which sends a Coord Object {x float, y float, weight int}
         // and recived an updated coordsArray
-        // try {
-        //     const response = await axios.post('http://localhost:3001/api/SendVote', {data:{
-        //             email:"danielthespy@gmail.com",
-        //             sessionId: "5d4e005c005ab1312b8593d8",
-        //             vote:{
-        //                 x:"42",
-        //                 y:"42",
-        //                 z:"3"
-        //             }
-        //         }});
-        //     console.log('Returned data:', response);
-        // } catch (e) {
-        //     this.setState({currentVote: clickCoords})
-        //     console.log(`Axios request failed: ${e}`);
-        // }
+        try {
+            console.log(this.state.sessionId);
+            const response = await axios.post('http://localhost:3001/api/SendVote', {data:{
+                    email:this.state.auth.email,
+                    sessionId: this.state.sessionId,
+                    vote:vote,
+                    timestamp: moment().unix()
+                }});
+            return new Promise((pass,fail) => {
+                if(response){
+                    // console.log('Returned data:', response);
+                    pass(response.data);
+                }else{
+                    fail(response);
+                }
+            })
+        } catch (e) {
+
+            console.log(`Axios request failed: ${e}`);
+        }
 
     }
 
@@ -252,6 +307,7 @@ class Fmap extends Component {
             <div>
                 <canvas ref="canvas" width={800} height={800}
                         onMouseDown={this.mouseDown} onMouseUp={this.mouseUp}
+                        onMouseMove={this.mouseMove} onDoubleClick={this.doubleClick}
                          />
             </div>
         );
@@ -260,4 +316,10 @@ class Fmap extends Component {
 
 }
 
-export default Fmap;
+function mapStateToProps(state){
+    return { auth: state.auth.authenticated }
+}
+
+export default connect(mapStateToProps, actions)(Fmap);
+
+// export default Fmap;

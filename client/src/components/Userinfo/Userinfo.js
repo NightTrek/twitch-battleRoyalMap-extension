@@ -4,61 +4,52 @@ import { connect } from 'react-redux';
 
 
 class Userinfo extends React.Component  {
+    constructor(props){
+        super(props);
+        this.state = {
+            user: null,
+            isLoading: true,
+            errors: null
+        };
 
-state = {
-    users: [],
-    isLoading: true,
-    errors: null
-  };
+    }
 
-  // getUsers() {
-  //   axios
-  //     .get("http://localhost:3001/auth/user")
-  //     .then(response =>
-  //       response.data.results.map(profile => ({
-  //         name: `${profile.data[0].display_name}`,
-  //         email: `${profile.data[0].email}`,
-  //         image: `${profile.data[0].profile_img_url}`
-  //       }))
-  //     )
-  //     .then(users => {
-  //       this.setState({
-  //         users,
-  //         isLoading: false
-  //       });
-  //     })
-  //     .catch(error => this.setState({ error, isLoading: false }));
-  // }
-  //
+
+
   componentDidMount() {
-    // console.log(this.props.auth.data[0].login)
-      // const User = {
-    //     namel: ,
-    //     email: ,
-    //     IMG: ,
-    // }
+    // console.log(this.props.userData)
+      if(this.props.userData){
+          let currentState= this.state;
+          currentState.isLoading = false;
+          this.setState(currentState);
+      }
+
+  }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+      // console.log(this.props.userData)
+      if(this.props.userData && this.state.isLoading){
+          let currentState= this.state;
+          currentState.isLoading = false;
+          currentState.user = this.props.userData;
+          this.setState(currentState);
+
+      }
   }
 
-  render() {
+    render() {
     const { isLoading, users } = this.state;
     return (
       <React.Fragment>
-        <h2>Random User</h2>
         <div>
           {!isLoading ? (
-            users.map(user => {
-              // const { name, email, image } = user;
-              return (
-                <div>
-                  <p>{this.props.auth.data[0].login}</p>
+              <div>
+                  <h2>{this.state.user.login}</h2>
                   <div>
-                    <img src={this.props.auth.data[0].profile_image_url} alt={"profilepic"} />
+                      <img src={this.state.user.profile_image_url} alt={"profilepic"} width={"50%"}/>
                   </div>
-                  <p>{this.props.auth.data[0].email}</p>
+                  <p>{this.state.user.email}</p>
                   <hr />
-                </div>
-              );
-            })
+              </div>
           ) : (
             <p>Loading...</p>
           )}

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Container from '../../components/Partials/Container';
-import Column from '../../components/Partials/Column';
-import Row from '../../components/Partials/Row';
+// import Column from '../../components/Partials/Column';
+// import Row from '../../components/Partials/Row';
 import Fmap from '../mapComponent/Fmap';
-// import { connect } from 'net';
-// import * as actions from './../actions';
+import {connect} from "react-redux";
+import * as actions from "../../actions";
+
 // access token, email, code
 class Map extends Component {
 
@@ -16,22 +17,16 @@ class Map extends Component {
         return (
             <div>
                 <Container>
-                    {/*<Row>*/}
-                    {/*    <br/>*/}
-                    {/*</Row>*/}
-                    {/*<Row>*/}
-                    {/*    <Column small={12} large={6} offset_lg={6}>*/}
-                    {/*            <Fmap />*/}
-                    {/*    </Column>*/}
-                    {/*</Row>*/}
-                    {/*<Row>*/}
-                    {/*    <hr/>*/}
-                    {/*</Row>*/}
                     <Fmap/>
                 </Container>
             </div>
         );
     }
 }
+function mapStateToProps(state){
+    return { auth: state.auth.authenticated }
+}
 
-export default Map;
+export default connect(mapStateToProps, actions)(Map);
+
+// export default ;
