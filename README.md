@@ -4,9 +4,7 @@ The Twitch Battle Royal extentsion allows streamers playing battle royal games s
 This is a full Stack APP utilizing the MERN stack. The backend requires that you have mongoDB installed as well as mongoose.
 You will also need a valid config file which should look similar too this 
 
-============================================================================
 ===============CONFIG FILE EXAMPLE =========================================
-============================================================================
 
 
 ``` 
