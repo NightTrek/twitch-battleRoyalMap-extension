@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import axios from "axios";
 import fortniteMap from "../../img/FORTNITESEASON10MAP.jpg"
 
-const startingData = [{ x: 1, y: 2, amount: 30 },
+const startingData = [{ x: 0, y: 0, amount: 30 },
     { x: 50, y: 55, amount: 40 },
     { x: 95, y: 85, amount: 25 },
     { x: 152, y: 120, amount: 10 },
@@ -145,7 +145,7 @@ class Fmap extends Component {
 
             ctx.fillStyle = "#ff0000";
             this.state.coordsArray.map( (item)=>{
-                ctx.fillRect(item.x, item.y,5,5);
+                ctx.fillRect(item.x, item.y,10,10);
             })
         ctx.fillRect(this.state.currentVote.x, this.state.currentVote.y,5,5);
 
