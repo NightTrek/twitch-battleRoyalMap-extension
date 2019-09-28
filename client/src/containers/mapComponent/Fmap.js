@@ -83,9 +83,12 @@ class Fmap extends Component {
         const canvas = this.refs.canvas;
         let mapIMG = new Image();
         mapIMG.src = fortniteMap;
+
         this.state = {
+            sessionId:props.sessionID,
             coordsArray: startingData,
             currentVote: {},
+            voted:false,
             currentMap: mapIMG,
             canvasRef:{},
             canvas:canvas,
@@ -102,6 +105,7 @@ class Fmap extends Component {
         this.mouseMove = this.mouseMove.bind(this);
         this.mouseUp = this.mouseUp.bind(this);
         this.handleScroll = this.handleScroll.bind(this);
+        this.doubleClick = this.doubleClick.bind(this);
 
 
     }
@@ -147,8 +151,13 @@ class Fmap extends Component {
             this.state.coordsArray.map( (item)=>{
                 ctx.fillRect(item.x, item.y,10,10);
             })
-        ctx.fillRect(this.state.currentVote.x, this.state.currentVote.y,5,5);
-
+        if(this.state.voted){
+            ctx.fillStyle = "#00ff45";
+            ctx.fillRect(this.state.currentVote.x+this.state.imgCoords.x, this.state.currentVote.y+this.state.imgCoords.y,25,25);
+        }else {
+            ctx.fillStyle = "#00ff45";
+            ctx.fillRect(this.state.currentVote.x + this.state.imgCoords.x, this.state.currentVote.y + this.state.imgCoords.y, 5, 5);
+        }
 
 
     }
@@ -164,7 +173,7 @@ class Fmap extends Component {
         currentState.lastX = newlastX;
         currentState.lastY = newlastY;
         currentState.dragStart = newdragStart;
-        currentState.currentVote = {x:evt.pageX- this.state.canvas.offsetLeft, y:evt.pageY - this.state.canvas.offsetTop};
+        currentState.currentVote = {x:(evt.pageX - this.state.canvas.offsetLeft)+this.state.imgCoords.x, y:(evt.pageY - this.state.canvas.offsetTop)+this.state.imgCoords.y};
         this.setState(currentState);
         // console.log(this.state);
     }
@@ -173,18 +182,22 @@ class Fmap extends Component {
         // console.log("mouse move event");
         let newlastX = evt.offsetX || (evt.pageX - this.state.canvas.offsetLeft);
         let newlastY = evt.offsetY || (evt.pageY - this.state.canvas.offsetTop);
-        if (this.state.dragStart){
-            let pt = this.state.canvasRef.transformedPoint(newlastX,newlastY);
-            let xT = pt.x-this.state.dragStart.x;
-            let yT = pt.y-this.state.dragStart.y;
-            this.state.canvasRef.translate(xT, yT);
-            this.updateCanvas();
-        }
+        console.log(`offsetX ${evt.pageX - this.state.canvas.offsetLeft} offsetY ${evt.pageY - this.state.canvas.offsetTop}  pageX ${evt.pageX} pageY ${evt.pageY} `);
         let currentState = this.state;
+        // if (this.state.dragStart){
+        //     let pt = this.state.canvasRef.transformedPoint(newlastX,newlastY);
+        //     let xT = pt.x-this.state.dragStart.x;
+        //     let yT = pt.y-this.state.dragStart.y;
+        //     this.state.canvasRef.translate(xT, yT);
+        //     currentState.imgCoords = {x:this.state.imgCoords.x+xT,y:this.state.imgCoords.y+yT};
+        //     this.updateCanvas();
+        // }
+        currentState.currentVote = {x:(evt.pageX - this.state.canvas.offsetLeft), y:(evt.pageY - this.state.canvas.offsetTop)};
         currentState.dragged = true;
         currentState.lastX = newlastX;
         currentState.lastY = newlastY;
         this.setState(currentState);
+        this.updateCanvas();
     }
 
     mouseUp(evt){
@@ -214,6 +227,15 @@ class Fmap extends Component {
         if (delta) this.zoom(delta);
         return evt.preventDefault() && false;
     }
+
+    doubleClick(evt){
+        let currentState = this.state;
+        currentState.voted = true;
+        currentState.coordsArray.push(currentState.currentVote);
+        this.setState(currentState);
+    }
+
+
 
 
 
@@ -252,6 +274,7 @@ class Fmap extends Component {
             <div>
                 <canvas ref="canvas" width={800} height={800}
                         onMouseDown={this.mouseDown} onMouseUp={this.mouseUp}
+                        onMouseMove={this.mouseMove} onDoubleClick={this.doubleClick}
                          />
             </div>
         );
