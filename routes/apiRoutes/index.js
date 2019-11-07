@@ -42,7 +42,7 @@ router.route('/startsession')
             res.send("ERROR INVALID email");
         }
     });
-
+//
 //Session Validate
 
 router.route('/validsession')

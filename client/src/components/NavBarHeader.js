@@ -24,8 +24,8 @@ class NavBarHeader extends Component {
   }
 
     mapUserInfoToState(props, prevState){
-      console.log(prevState.auth);
-      if(prevState.auth == null && props.auth.data){
+      // console.log(prevState.auth);
+      if(prevState.auth !== null && props.auth.data){
           console.log("maping auth to state");
           let currentState = this.state;
           currentState.auth = props.auth.data[0];
