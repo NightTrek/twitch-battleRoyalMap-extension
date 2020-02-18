@@ -54,6 +54,7 @@ class PostAuth extends Component {
             console.log(ValidSessionID.data);
             let currentState =this.state;
             currentState.sessionID = currentSessionID;
+            currentState.voteArray = ValidSessionID.data.voteArray
             currentState.showMap = true;
             this.setState(currentState);
         }else{
@@ -88,7 +89,7 @@ class PostAuth extends Component {
             <div className="PostAuthC">
                 <Container>
                     {this.state.showMap ? (
-                        <div>
+                        <div style={{width:820}}>
                             <Fmap sessionID={this.state.sessionID} voteArray={this.state.voteArray}/>
                         </div>
                     ) : (

@@ -141,6 +141,7 @@ class Fmap extends Component {
 
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
+        this.mapUserInfoToState(prevProps,prevState);
         this.updateCanvas();
     }
     mapUserInfoToState(props, prevState){

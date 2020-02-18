@@ -42,7 +42,7 @@ router.route('/startsession')
             res.send("ERROR INVALID email");
         }
     });
-
+//
 //Session Validate
 
 router.route('/validsession')
@@ -53,7 +53,7 @@ router.route('/validsession')
                 let CurrentVotes = await Session.find({_id: req.body.sessionId});
                 console.log(CurrentVotes)
                 // if(CurrentVotes[0).userId
-                res.send(CurrentVotes[0].userId);
+                res.send(CurrentVotes[0]);
             }catch(err){
                 logger.log({
                     level: 'error',
