@@ -51,17 +51,18 @@ class PostAuth extends Component {
         let currentSessionID = this.state.joinSessionID;
         let ValidSessionID = await axios.post('http://localhost:3001/api/validsession', {sessionId:currentSessionID});
         console.log(ValidSessionID);
-        if(ValidSessionID.data !== "error invalid session"){
-            console.log("==============");
-            console.log(ValidSessionID);
-            console.log("=================");
+        if(ValidSessionID.data !== "error invalid session" && ValidSessionID.data !== "error Session Expired"){
             let currentState =this.state;
             currentState.sessionID = currentSessionID;
-            currentState.voteArray = ValidSessionID.data.voteArray
+            currentState.voteArray = ValidSessionID.data.voteArray;
             currentState.showMap = true;
             currentState.sessionTimeRemaining = ValidSessionID.data.sessionVoidTime - moment().unix();
             this.setState(currentState);
         }else{
+            if(ValidSessionID.data === "error Session Expired"){
+                this.setState({joinSessionID:"EXPIRED SESSION ID"});
+            }
+
             this.setState({joinSessionID:"INVALID SESSION ID"});
         }
     }
@@ -74,8 +75,8 @@ class PostAuth extends Component {
     async startNewSession(){
         // if(this.props.auth.data){
         //
-        // }
-        let VoidTime = moment().unix()+this.state.newSessionTime;
+        // } TODO check if session time is valid. ensure there isnt negative session times. or change to slider
+        let VoidTime = moment().unix()+parseInt(this.state.newSessionTime);
         console.log(VoidTime);
         let theNewSession = await axios.post('http://localhost:3001/api/startsession', {data:{email:this.props.auth.data[0].email,VoidTime:VoidTime}});
         console.log(theNewSession);

@@ -52,9 +52,13 @@ router.route('/validsession')
             console.log('Validator HIT');
             try {
                 let CurrentVotes = await Session.find({_id: req.body.sessionId});
-                console.log(CurrentVotes)
-                // if(CurrentVotes[0).userId
-                res.send(CurrentVotes[0]);
+                console.log(CurrentVotes);
+                if(CurrentVotes[0].sessionVoidTime - moment().unix() <= 0){
+                    res.send("error Session Expired");
+                }
+                else{
+                    res.send(CurrentVotes[0]);
+                }
             }catch(err){
                 logger.log({
                     level: 'error',

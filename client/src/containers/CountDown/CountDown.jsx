@@ -11,14 +11,17 @@ class CountDown extends Component {
     }
 
     componentDidMount() {
-        this.timeout = setInterval(() => {
-            let currentIdx = parseInt(this.state.RemainingTime)-1;
-            if(currentIdx <= 0){
-                currentIdx=0
-                // this.props.SessionEnd()
-            }
-            this.setState({ RemainingTime:currentIdx.toString() });
-        }, 1000);
+        if(parseInt(this.state.RemainingTime) >0){
+            this.timeout = setInterval(() => {
+                let currentIdx = parseInt(this.state.RemainingTime)-1;
+                if(currentIdx <= 0){
+                    currentIdx=0
+                    //TODO add action to complete when the timer runs out.
+                    // this.props.SessionEnd()
+                }
+                this.setState({ RemainingTime:currentIdx.toString() });
+            }, 1000);
+        }
     }
 
     componentDidUnmount() {
