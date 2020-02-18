@@ -140,7 +140,7 @@ app.get('/auth/user', function (req, res) {
     console.log("Auth hit");
     try{
         const key = Object.keys(req.sessionStore.sessions)[0];
-        // console.log(req.sessionStore);
+        // console.log(req.sessionStore.sessions);
         console.log(key);
         const obj = JSON.parse(req.sessionStore.sessions[key]);
         res.send(obj.passport.user);

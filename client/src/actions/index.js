@@ -20,7 +20,7 @@ export const signin = () => async dispatch => {
     const res = await axios.get('http://localhost:3001/auth/user');
     // We are getting our token back from res.data.token
     // We want to send this token to our reducer
-    console.log(res.data)
+    console.log(res.data);
 
     dispatch({ type: AUTH_USER, payload: res.data });
     localStorage.setItem('token', res.data);

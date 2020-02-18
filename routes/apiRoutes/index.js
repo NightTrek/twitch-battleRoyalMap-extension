@@ -2,6 +2,7 @@ const router      = require('express').Router();
 const User        = require('../../model/User');
 const Session     = require('../../model/Session')
 const logger         = require('../../logs/Wlogger');
+const moment        = require('moment');
 
 
 
@@ -11,14 +12,14 @@ const logger         = require('../../logs/Wlogger');
 //Start session takes data obj with an "email" "VoidTime" and returns a Session "_id" created by adding a new DB entry
 router.route('/startsession')
     .post(async (req, res) => {
-        console.log(req.body.data)
+        console.log(req.body.data);
         if(req.body.data.email){
             try{
                 let Profile = await User.find({email:req.body.data.email});
                 console.log(Profile);
-                console.log(req.body.VoidTime)
+                console.log(req.body.VoidTime);
                 let newSession = await Session.create({userId:Profile[0]._id,sessionVoidTime:req.body.data.VoidTime,voteArray:[]});
-                res.send(newSession)
+                res.send(newSession);
                 logger.log({
                     level: 'info',
                     message: `SUCCESSFULL START SESSION|||| BY| ${req.body.data.email} || session id || ${newSession._id}`
@@ -73,19 +74,14 @@ router.route('/validsession')
 //take a xyz datapoint and the session _id
 router.route('/sendvote')
     .post(async(req, res) => {
-        if(req.body.data !== null && req.body.data.sessionId !== undefined && req.body.data.email !== undefined){
-            console.log("i VOTED hit!=====================")
+        if(req.body.data !== null && req.body.data.sessionId !== undefined && req.body.data.email !== undefined && req.body.data.timestamp !== undefined){
+            console.log("i VOTED hit!=====================");
             let userID = await User.find({email:req.body.data.email},"_id");
             console.log(userID);
-            let CurrentVotes = await Session.find({_id:req.body.data.sessionId}, 'voteArray');
-            // console.log(`current votes ${JSON.stringify(CurrentVotes)}`);
-            // console.log({
-            //     x:req.body.data.vote.x,
-            //     y:req.body.data.vote.y,
-            //     z:req.body.data.vote.z,
-            //     voterID:userID[0]._id
-            //
-            // })
+            let CurrentVotes = await Session.find({_id:req.body.data.sessionId});
+            console.log("=====================");
+            console.log(CurrentVotes);
+            console.log("=====================");
              CurrentVotes[0].voteArray.push({
                 x:req.body.data.vote.x,
                 y:req.body.data.vote.y,

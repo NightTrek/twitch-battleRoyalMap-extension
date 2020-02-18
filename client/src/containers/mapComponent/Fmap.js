@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import {VictoryScatter} from 'victory';
 import axios from "axios";
 import moment from "moment";
 import fortniteMap from "../../img/FORTNITESEASON10MAP.jpg"
@@ -144,6 +143,7 @@ class Fmap extends Component {
         this.mapUserInfoToState(prevProps,prevState);
         this.updateCanvas();
     }
+
     mapUserInfoToState(props, prevState){
         // console.log(prevState.auth);
         if(prevState.auth == null && props.auth.data){

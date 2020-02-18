@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import * as actions from './../actions';
+import * as actions from '../../actions';
 import axios from 'axios';
-
+import moment from "moment";
 
 //import react components
-import '../containers/PostAuth.css'
-import Container from './../components/Partials/Container';
-import Column from './../components/Partials/Column';
-import Row from './../components/Partials/Row';
-import Fmap from '../containers/mapComponent/Fmap';
-
+import './PostAuth.css'
+import Container from './../../components/Partials/Container';
+import Column from './../../components/Partials/Column';
+import Row from './../../components/Partials/Row';
+import Fmap from '../mapComponent/Fmap';
+import CountDown from "../CountDown/CountDown";
 
 class PostAuth extends Component {
 
@@ -20,6 +20,7 @@ class PostAuth extends Component {
             joinSessionID:"",
             sessionID:null,
             voteArray:null,
+            sessionTimeRemaining:null,
             newSessionTime:"",
             showMap:false
         };
@@ -51,11 +52,14 @@ class PostAuth extends Component {
         let ValidSessionID = await axios.post('http://localhost:3001/api/validsession', {sessionId:currentSessionID});
         console.log(ValidSessionID);
         if(ValidSessionID.data !== "error invalid session"){
-            console.log(ValidSessionID.data);
+            console.log("==============");
+            console.log(ValidSessionID);
+            console.log("=================");
             let currentState =this.state;
             currentState.sessionID = currentSessionID;
             currentState.voteArray = ValidSessionID.data.voteArray
             currentState.showMap = true;
+            currentState.sessionTimeRemaining = ValidSessionID.data.sessionVoidTime - moment().unix();
             this.setState(currentState);
         }else{
             this.setState({joinSessionID:"INVALID SESSION ID"});
@@ -71,13 +75,16 @@ class PostAuth extends Component {
         // if(this.props.auth.data){
         //
         // }
-        let theNewSession = await axios.post('http://localhost:3001/api/startsession', {data:{email:this.props.auth.data[0].email,VoidTime:this.state.newSessionTime}});
+        let VoidTime = moment().unix()+this.state.newSessionTime;
+        console.log(VoidTime);
+        let theNewSession = await axios.post('http://localhost:3001/api/startsession', {data:{email:this.props.auth.data[0].email,VoidTime:VoidTime}});
         console.log(theNewSession);
         if(theNewSession.data !== "error invalid session"){
             let currentState =this.state;
             currentState.showMap = true;
             currentState.sessionID = theNewSession.data['_id'];
             currentState.voteArray = theNewSession.data['voteArray'];
+            currentState.sessionTimeRemaining = this.state.newSessionTime;
             this.setState(currentState);
         }else{
             this.setState({joinSessionID:"INVALID SESSION ID"});
@@ -90,6 +97,7 @@ class PostAuth extends Component {
                 <Container>
                     {this.state.showMap ? (
                         <div style={{width:820}}>
+                            <CountDown timeleft={this.state.sessionTimeRemaining}/>
                             <Fmap sessionID={this.state.sessionID} voteArray={this.state.voteArray}/>
                         </div>
                     ) : (
