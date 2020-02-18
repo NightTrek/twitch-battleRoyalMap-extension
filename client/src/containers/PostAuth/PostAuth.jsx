@@ -108,7 +108,7 @@ class PostAuth extends Component {
                                 <div style={{padding:"5vh"}}></div>
                             </Row>
                             <Row>
-                                <Column small={12} large={6} medium={6}>
+                                <Column small={12} large={6} medium={12}>
                                     <div className="startSession">
                                         <h5>Start A session</h5>
                                         <p>Pick how long you want the vote to go for!</p>
@@ -118,7 +118,7 @@ class PostAuth extends Component {
                                     </div>
 
                                 </Column>
-                                <Column small={12} large={6} medium={6}>
+                                <Column small={12} large={6} medium={12}>
                                     <div className="joinSession">
                                         <h5>Join A session</h5>
                                         <p>Input your session id here</p>
