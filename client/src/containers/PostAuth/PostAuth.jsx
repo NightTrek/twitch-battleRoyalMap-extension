@@ -7,8 +7,7 @@ import moment from "moment";
 //import react components
 import './PostAuth.css'
 import Container from './../../components/Partials/Container';
-import Column from './../../components/Partials/Column';
-import Row from './../../components/Partials/Row';
+import SessionTree from "../SessionTree/SessionTree";
 import Fmap from '../mapComponent/Fmap';
 import CountDown from "../CountDown/CountDown";
 
@@ -102,32 +101,7 @@ class PostAuth extends Component {
                             <Fmap sessionID={this.state.sessionID} voteArray={this.state.voteArray}/>
                         </div>
                     ) : (
-                        <div>
-                            <Row><h1>Pick your journey either start a vote or join a session</h1></Row>
-                            <Row>
-                                <div style={{padding:"5vh"}}></div>
-                            </Row>
-                            <Row>
-                                <Column small={12} large={6} medium={12}>
-                                    <div className="startSession">
-                                        <h5>Start A session</h5>
-                                        <p>Pick how long you want the vote to go for!</p>
-                                        <label>Number Of seconds till vote ends </label>
-                                        <input type={"text"} value={this.state.newSessionTime} onChange={this.startSessionHandler}></input>
-                                        <button onClick={this.startNewSession}>submit</button>
-                                    </div>
-
-                                </Column>
-                                <Column small={12} large={6} medium={12}>
-                                    <div className="joinSession">
-                                        <h5>Join A session</h5>
-                                        <p>Input your session id here</p>
-                                        <input type={"text"} value={this.state.joinSessionID} onChange={this.sessionValidHandler}></input>
-                                        <button onClick={this.validateSession}>submit</button>
-                                    </div>
-                                </Column>
-                            </Row>
-                        </div>
+                        <SessionTree that={this}/>
                     )}
                 </Container>
             </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './SideDrawer.css';
-import NavLinks from '../../NavLinks';
+import NavLinks from '../../App/NavLinks';
 import Userinfo from '../../Userinfo/Userinfo';
 
 const sideDrawer = props => {

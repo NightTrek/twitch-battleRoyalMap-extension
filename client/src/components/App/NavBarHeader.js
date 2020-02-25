@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import Toolbar from './Partials/Toolbar';
-import SideDrawer from './Partials/SideDrawer/SideDrawer';
-import Backdrop from './Backdrop/Backdrop';
-import "./Welcome.css";
-import * as actions from "../actions";
+import Toolbar from '../Partials/Toolbar';
+import SideDrawer from '../Partials/SideDrawer/SideDrawer';
+import Backdrop from '../Backdrop/Backdrop';
+import "../Welcome/Welcome.css";
+import * as actions from "../../actions";
 
 class NavBarHeader extends Component {
     constructor(props){

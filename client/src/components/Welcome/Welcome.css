@@ -20,3 +20,10 @@
     display: flex;
     justify-content: center;
 }
+.button-Start{
+    border: #521751 solid 5px;
+    width:500px;
+    height:150px;
+    background-color: white;
+    color:#521751;
+}

@@ -8,8 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 //
-import App from './components/App';
-import Welcome from './components/Welcome';
+import App from "./components/App/App"
+import Welcome from "./components/Welcome/Welcome";
 import PostAuth from "./containers/PostAuth/PostAuth";
 import Map from "./containers/Map/Map";
 import reducers from './reducers';

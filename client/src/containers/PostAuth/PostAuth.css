@@ -1,3 +1,12 @@
+.flexContainer{
+    display:flex;
+    flex-direction: column;
+}
+
+.flexRow{
+    display:flex;
+    flex-direction: row;
+}
 .PostAuthC {
     margin-left: 200px;
     margin-top: 100px;
@@ -11,6 +20,11 @@
     margin:24px;
     border-radius: 3px;
     background-color: #521751;
+    color:white;
+}
+.sessionText{
+    margin: 0 auto;
+    padding: 5px;
 }
 
 .joinSession{

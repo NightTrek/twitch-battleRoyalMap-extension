@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import { signin} from "../actions";
+import { signin} from "../../actions";
 import { connect } from 'react-redux';
-import SlideImages from './Slideimages/Slideimages'
+import SlideImages from '../Slideimages/Slideimages'
 
 
 //import react components
 
 // import navbar from 'navbar'
-import Column from './Partials/Column';
-import Row from './Partials/Row';
+import Column from '../Partials/Column';
+import Row from '../Partials/Row';
 import { Jumbotron, Container, Button} from 'reactstrap';
 
 
@@ -20,8 +20,7 @@ class Welcome extends Component {
         return(
             <div>
                 <Container>
-                    <Jumbotron>
-                    <h1 className="display-4 jumbomain">Vote your Landing BattleRoyal </h1>
+                    <h1 className="display-4 jumbomain">Vote your Landing</h1>
                     <Row>
                         <Column small={12} large={6}>
                                 <h5>Tell your favorite streamer where to Land</h5>
@@ -34,22 +33,23 @@ class Welcome extends Component {
                                 <h5>Current Games Supported</h5>
                                 <p>Right now we only support Fortnite Battle Royal but we plan to add support for the follow games soon</p>
                                 <ul>
-                                    <li>Fortnite Live map Data</li>
-                                    <li>Apex Legends</li>
-                                    <li>Player Unknowns BattleGrounds</li>
-                                    <li>H1Z1</li>
-                                    <li>Ring of Elysuim</li>
+                                    <li>Fortnite</li>
+                                    <li>Apex Legends                    (coming soon)</li>
+                                    <li>Player Unknowns BattleGrounds   (coming soon)</li>
+                                    <li>H1Z1                            (coming soon)</li>
+                                    <li>Ring of Elysuim                 (coming soon)</li>
                                 </ul>
                         </Column>
                     </Row>
                         <Row>
-                            <a style={{width:"5000px",height:"200px"}} className ="btn_start" href='http://localhost:3001/auth/twitch'><Button style={{width:"500px",height:"150px"}} outline color="primary">Push button to start</Button>{' '}</a>
+                            <a style={{width:"5000px",height:"200px"}} className ="btn_start" href='http://localhost:3001/auth/twitch'>
+                                <Button className={"button-Start"} >Push button to start</Button>{' '}
+                            </a>
                         </Row>
                         {/*<a href='http://localhost:3001/auth/twitch'><button>Start</button></a>*/}
                     <Row>
                         <SlideImages />
                     </Row>
-                    </Jumbotron>
                 </Container>
             </div>
         );
