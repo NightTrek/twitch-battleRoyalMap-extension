@@ -1,13 +1,22 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import moment from "moment";
-import Column from "../../components/Partials/Column";
 
 import network from "../../img/network.svg";
 import start from "../../img/start-button.svg";
 import './SessionTree.css';
 import {connect} from "react-redux";
 import * as actions from "../../actions";
+
+const convertSecondsToMinutes = (seconds) =>{
+  if(seconds%60===0){
+      return (seconds/60).toString()+" minutes";
+  }else if(seconds/60<1){
+        return seconds.toString()+ " seconds";
+  }else{
+      return Math.floor(seconds/60).toString()+" minutes and "+ (seconds%60).toString()+ " seconds"
+  }
+};
 
 const ShowSessionAPI = (props) => {
     if(props.state.newSession){
@@ -19,11 +28,15 @@ const ShowSessionAPI = (props) => {
                         <p>Pick how long you want the vote to go for!</p>
                     </div>
                     <div>
-                        <label className={"sessionLabel"}>Number Of seconds till vote ends </label>
-                        <input className={"sessionIn"} type={"text"} value={props.state.newSessionTime} onChange={props.startSessionHandler}></input>
+                        <label className={"sessionLabel"}>Time till Vote ends </label>
+                        <label className={"sessionLabel"}>{convertSecondsToMinutes(props.state.newSessionTime)}</label>
+                        <input className={"sessionIn"} type={"range"} value={props.state.newSessionTime} onChange={props.startSessionHandler} min={20} max={600}></input>
                     </div>
                     <div className={"flexRow"} id={"buttonRow"}>
-                        <button className={"startSessionButton"} >Back</button>
+                        <button className={"startSessionButton"} onClick={props.backButton}>Back</button>
+                        <div className={"spacer"}>
+
+                        </div>
                         <button className={"startSessionButton"} onClick={props.startNewSession}>submit</button>
                     </div>
                 </div>
@@ -32,13 +45,25 @@ const ShowSessionAPI = (props) => {
     if(props.state.joinSession){
         return (
             <div className={"flexContainer"}>
-                <div className="joinSession">
-                    <h3>Join A session</h3>
-                    <p>Input your session id here</p>
-                    <input type={"text"} value={props.state.joinSessionID} onChange={props.sessionValidHandler}></input>
-                    <button onClick={props.validateSession}>submit</button>
+                <div className="startSession">
+                    <div className={"sessionText"}>
+                        <h3 >Join A session</h3>
+                        <p>Input your session id here</p>
+                    </div>
+                    <div>
+                        <label className={"sessionLabel"}>Input Session ID here</label>
+                        <input className={"sessionIn"} type={"text"} value={props.state.joinSessionID} onChange={props.sessionValidHandler}></input>
+                    </div>
+                    <div className={"flexRow"} id={"buttonRow"}>
+                        <button className={"startSessionButton"} onClick={props.backButton}>Back</button>
+                        <div className={"spacer"}>
+
+                        </div>
+                        <button className={"startSessionButton"} onClick={props.validateSession}>submit</button>
+                    </div>
                 </div>
             </div>
+
         );
     }
 };
@@ -61,10 +86,14 @@ class SessionTree extends Component {
         };
         this.sessionValidHandler = this.sessionValidHandler.bind(this);
         this.startSessionHandler = this.startSessionHandler.bind(this);
+        this.backToSessionTree = this.backToSessionTree.bind(this);
+        this.joinSessionButton = this.joinSessionButton.bind(this);
+        this.newSessionButton = this.newSessionButton.bind(this);
         this.validateSession = this.validateSession.bind(this);
         this.startNewSession = this.startNewSession.bind(this);
-        this.newSessionButton = this.newSessionButton.bind(this);
-        this.joinSessionButton = this.joinSessionButton.bind(this);
+
+
+
     }
 
     sessionValidHandler(event){
@@ -134,6 +163,12 @@ class SessionTree extends Component {
         cstate.joinSession = true;
         this.setState(cstate);
     }
+    backToSessionTree(){
+        let cstate = this.state;
+        cstate.joinSession = false;
+        cstate.newSession  = false;
+        this.setState(cstate);
+    }
 
     render() {
         return (
@@ -151,7 +186,7 @@ class SessionTree extends Component {
                         </div>
                 ):(
                     <ShowSessionAPI state={this.state}  sessionValidHandler={this.sessionValidHandler} startSessionHandler={this.startSessionHandler}
-                                    validateSession={this.validateSession} startNewSession={this.startNewSession}/>
+                                    validateSession={this.validateSession} startNewSession={this.startNewSession} backButton={this.backToSessionTree}/>
                 )}
             </div>
         );

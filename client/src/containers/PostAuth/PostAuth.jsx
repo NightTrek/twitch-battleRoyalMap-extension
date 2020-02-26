@@ -24,10 +24,8 @@ class PostAuth extends Component {
             showMap:false
         };
 
-        this.sessionValidHandler = this.sessionValidHandler.bind(this);
-        this.startSessionHandler = this.startSessionHandler.bind(this);
-        this.validateSession = this.validateSession.bind(this);
-        this.startNewSession = this.startNewSession.bind(this);
+        this.backToSessionTree = this.backToSessionTree.bind(this);
+        this.copyLink = this.copyLink.bind(this);
     }
     componentDidMount() {
         this.props.signin()
@@ -41,69 +39,43 @@ class PostAuth extends Component {
     }
 
 
-    sessionValidHandler(event){
-            let newState = {joinSessionID: event.target.value};
-            this.setState(newState);
-    }
-
-    async validateSession(){
-        let currentSessionID = this.state.joinSessionID;
-        let ValidSessionID = await axios.post('http://localhost:3001/api/validsession', {sessionId:currentSessionID});
-        console.log(ValidSessionID);
-        if(ValidSessionID.data !== "error invalid session" && ValidSessionID.data !== "error Session Expired"){
-            let currentState =this.state;
-            currentState.sessionID = currentSessionID;
-            currentState.voteArray = ValidSessionID.data.voteArray;
-            currentState.showMap = true;
-            currentState.sessionTimeRemaining = ValidSessionID.data.sessionVoidTime - moment().unix();
-            this.setState(currentState);
-        }else{
-            if(ValidSessionID.data === "error Session Expired"){
-                this.setState({joinSessionID:"EXPIRED SESSION ID"});
-            }
-
-            this.setState({joinSessionID:"INVALID SESSION ID"});
+    async copyLink(){
+        try{
+            console.log("trying to copy");
+            let clipboardRes = await navigator.clipboard.writeText(""+ this.state.sessionID);
+        }catch(e){
+            console.log(e)
         }
     }
-
-    startSessionHandler(event){
-        let newState = {newSessionTime:event.target.value};
-        this.setState(newState);
-    }
-
-    async startNewSession(){
-        // if(this.props.auth.data){
-        //
-        // } TODO check if session time is valid. ensure there isnt negative session times. or change to slider
-        let VoidTime = moment().unix()+parseInt(this.state.newSessionTime);
-        console.log(VoidTime);
-        let theNewSession = await axios.post('http://localhost:3001/api/startsession', {data:{email:this.props.auth.data[0].email,VoidTime:VoidTime}});
-        console.log(theNewSession);
-        if(theNewSession.data !== "error invalid session"){
-            let currentState =this.state;
-            currentState.showMap = true;
-            currentState.sessionID = theNewSession.data['_id'];
-            currentState.voteArray = theNewSession.data['voteArray'];
-            currentState.sessionTimeRemaining = this.state.newSessionTime;
-            this.setState(currentState);
-        }else{
-            this.setState({joinSessionID:"INVALID SESSION ID"});
-        }
+    backToSessionTree(){
+        let cstate = this.state;
+        cstate.showMap = false;
+        this.setState(cstate);
     }
 
     render() {
         return (
             <div className="PostAuthC">
-                <Container>
                     {this.state.showMap ? (
-                        <div style={{width:820}}>
-                            <CountDown timeleft={this.state.sessionTimeRemaining}/>
+                        <div className={"flexContainer mapbox"} style={{width:860}}>
+                            <div className={"flexRow topBar"}>
+                                <CountDown timeleft={this.state.sessionTimeRemaining}/>
+                                <div className={"spacer"}>
+                                </div>
+                                <h5>Session ID:</h5>
+                                <h5>{this.state.sessionID}</h5>
+                            </div>
+                            <div className={"flexRow topBar"}>
+                                <button className={"cpButton"} onClick={this.backToSessionTree}>Back</button>
+                                <div className={"spacer"}>
+                                </div>
+                                <button className={"cpButton"} onClick={this.copyLink}>copy ID</button>
+                            </div>
                             <Fmap sessionID={this.state.sessionID} voteArray={this.state.voteArray}/>
                         </div>
                     ) : (
                         <SessionTree that={this}/>
                     )}
-                </Container>
             </div>
         );
     }

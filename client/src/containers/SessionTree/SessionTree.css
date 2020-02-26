@@ -10,7 +10,6 @@
     flex-direction: row;
     flex-flow: wrap;
     justify-content: space-around;
-    padding:12px;
 }
 
 .sessionTreeButton{
@@ -68,6 +67,10 @@
 .startSessionButton{
     margin-top:36px;
     width: 80px;
+}
+.spacer{
+    width: 352px;
+    flex-shrink: inherit;
 }
 #buttonRow{
     margin-left:24px;

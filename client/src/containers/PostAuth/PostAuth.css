@@ -7,30 +7,48 @@
     display:flex;
     flex-direction: row;
 }
+
 .PostAuthC {
-    margin-left: 200px;
     margin-top: 100px;
 }
 
-.startSession{
-    display:flex;
-    flex-flow: column wrap;
-    width:364px;
-    height:256px;
-    margin:24px;
-    border-radius: 3px;
-    background-color: #521751;
-    color:white;
-}
-.sessionText{
-    margin: 0 auto;
-    padding: 5px;
+.topBar{
+    margin-bottom: 12px;
 }
 
-.joinSession{
-    width:364px;
-    height:256px;
-    margin:24px;
+.spacer{
+    width: 420px;
+    flex-shrink: inherit;
+}
+
+.cpButton{
+    box-shadow: 0px 10px 14px -7px #521751;
+    background:linear-gradient(to bottom, #521751 5%, #874c86 100%);
+    background-color:#521751;
+    border-radius:8px;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:16px;
+    font-weight:bold;
+    padding:8px 12px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #521751;
+}
+
+.cpButton:hover {
+    background:linear-gradient(to bottom, #874c86 5%, #521751 100%);
+    background-color:#874c86;
+}
+.cpButton:active {
+    position:relative;
+    top:1px;
+}
+
+.mapbox{
+    border:3px solid #521751;
     border-radius: 3px;
-    background-color: lightblue;
+    padding: 24px;
+    margin:12px;
 }
