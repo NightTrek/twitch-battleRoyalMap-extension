@@ -70,7 +70,7 @@ const ShowSessionAPI = (props) => {
 
 
 
-
+//
 class SessionTree extends Component {
 
     constructor(props) {
@@ -172,7 +172,7 @@ class SessionTree extends Component {
 
     render() {
         return (
-            <div>
+            <div className={"grey"}>
                 {this.showTree() ? (
                         <div className={"flexRow"}>
                             <div className={'sessionTreeButton'} onClick={this.newSessionButton} >

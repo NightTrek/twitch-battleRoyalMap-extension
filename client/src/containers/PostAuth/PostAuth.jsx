@@ -72,7 +72,7 @@ class PostAuth extends Component {
                             <Fmap sessionID={this.state.sessionID} voteArray={this.state.voteArray}/>
                         </div>
                     ) : (
-                        <SessionTree that={this}/>
+                        <SessionTree  that={this}/>
                     )}
             </div>
         );

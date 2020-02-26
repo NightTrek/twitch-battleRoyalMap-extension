@@ -1,29 +1,64 @@
-.container {
-    margin-top: 70px;
-    background-color: white;
+.flexContainer{
+    display:flex;
+    flex-direction: column;
+
+}
+.pageContainer{
+    width: 90%;
+    margin:70px auto;
 }
 
-.jumbomain {
-    padding-top: 4x;
-    text-align: center !important;
+h1{
+    margin:0 auto;
 }
 
-.row {
-    margin-top: 40px;
+.flexRow{
+    display:flex;
+    flex-direction: row;
+    margin-top:36px;
 }
 
 .toast {
     width: 400px;
 }
 
-.btn_start {
-    display: flex;
-    justify-content: center;
+.textBox{
+    width: 40%;
 }
-.button-Start{
-    border: #521751 solid 5px;
-    width:500px;
-    height:150px;
-    background-color: white;
-    color:#521751;
+
+.startButton{
+    width:40%;
+    height:128px;
+    box-shadow: 0px 10px 14px -7px #9147FF;
+    background:linear-gradient(to bottom, #9147FF 5%, #874c86 100%);
+    background-color:#9147FF;
+    border-radius:8px;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:48px;
+    font-weight:bold;
+    padding:8px 36px;
+    text-decoration:none;
+    text-align: center;
+    text-shadow:0px 1px 0px #9147FF;
+}
+
+.startButton h3 {
+    margin:32px;
+}
+
+.startButton:hover {
+    background:linear-gradient(to bottom, #9147FF 5%, #521751 100%);
+    background-color:#9147FF;
+    color: #46bc90;
+}
+.startButton:active {
+    position:relative;
+    top:1px;
+}
+
+.btn-text{
+    margin-top:auto;
 }
