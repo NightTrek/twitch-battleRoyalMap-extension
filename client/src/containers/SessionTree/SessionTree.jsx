@@ -21,7 +21,7 @@ const convertSecondsToMinutes = (seconds) =>{
 const ShowSessionAPI = (props) => {
     if(props.state.newSession){
         return (
-            <div className={"flexContainer"}>
+            <div className={"flexRow"}>
                 <div className="startSession">
                     <div className={"sessionText"}>
                         <h3 >Start A session</h3>
@@ -44,7 +44,7 @@ const ShowSessionAPI = (props) => {
     }
     if(props.state.joinSession){
         return (
-            <div className={"flexContainer"}>
+            <div className={"flexRow"}>
                 <div className="startSession">
                     <div className={"sessionText"}>
                         <h3 >Join A session</h3>
@@ -175,13 +175,15 @@ class SessionTree extends Component {
             <div className={"grey"}>
                 {this.showTree() ? (
                         <div className={"flexRow"}>
-                            <div className={'sessionTreeButton'} onClick={this.newSessionButton} >
+                            <div className={"flexRow"}>
+                                <div className={'sessionTreeButton'} onClick={this.newSessionButton} >
                                     <img src={start} alt={"Star session icon"} className={"sessionButtonIcon"}/>
                                     <h5 className={"sessionButtonText"}> Start a new session</h5>
-                            </div>
-                            <div className={"sessionTreeButton"} onClick={this.joinSessionButton}>
+                                </div>
+                                <div className={"sessionTreeButton"} onClick={this.joinSessionButton}>
                                     <img src={network} alt={"Join session icon"} className={"sessionButtonIcon"}/>
                                     <h5 className={"sessionButtonText"}> Join Session</h5>
+                                </div>
                             </div>
                         </div>
                 ):(
