@@ -37,7 +37,7 @@ class Userinfo extends React.Component  {
   }
 
     render() {
-    const { isLoading, users } = this.state;
+    const { isLoading } = this.state;
     return (
       <React.Fragment>
         <div>

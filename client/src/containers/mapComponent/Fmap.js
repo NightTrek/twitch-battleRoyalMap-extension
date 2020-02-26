@@ -175,8 +175,8 @@ class Fmap extends Component {
 
             ctx.fillStyle = "#ff0000";
             this.state.coordsArray.map( (item)=>{
-                ctx.fillRect(item.x, item.y,10,10);
-            })
+                return ctx.fillRect(item.x, item.y,10,10);
+            });
         if(this.state.voted){
             ctx.fillStyle = "#00ff45";
             ctx.fillRect(this.state.currentVote.x+this.state.imgCoords.x, this.state.currentVote.y+this.state.imgCoords.y,25,25);

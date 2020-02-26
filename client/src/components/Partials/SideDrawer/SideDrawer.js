@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './SideDrawer.css';
 import NavLinks from '../../App/NavLinks';
 import Userinfo from '../../Userinfo/Userinfo';

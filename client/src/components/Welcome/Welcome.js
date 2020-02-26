@@ -9,7 +9,7 @@ import SlideImages from '../Slideimages/Slideimages'
 // import navbar from 'navbar'
 import Column from '../Partials/Column';
 import Row from '../Partials/Row';
-import { Jumbotron, Container, Button} from 'reactstrap';
+import { Container, Button} from 'reactstrap';
 
 
 class Welcome extends Component {
@@ -25,7 +25,7 @@ class Welcome extends Component {
                         <Column small={12} large={6}>
                                 <h5>Tell your favorite streamer where to Land</h5>
                                 <p> The Twitch extension where you can vote for a landing spot in BattleRoyal Games.
-                                Streamers can request their viewers vote on where to land all on a live map of the votes.
+                                    Streamers can request their viewers vote on where to land all on a live map of the votes.
                                     Our Advanced algorithms weights those votes and comes up with an single point to land.
                                     Viewers can pay streamers with bits to make their vote come on top! </p>
                         </Column>

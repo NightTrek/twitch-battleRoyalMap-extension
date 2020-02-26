@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
-import axios from 'axios';
-import moment from "moment";
+
 
 //import react components
 import './PostAuth.css'
-import Container from './../../components/Partials/Container';
 import SessionTree from "../SessionTree/SessionTree";
 import Fmap from '../mapComponent/Fmap';
 import CountDown from "../CountDown/CountDown";
@@ -38,11 +36,11 @@ class PostAuth extends Component {
         }
     }
 
-
+//copy The sesion id from state to the users clipboard
     async copyLink(){
         try{
             console.log("trying to copy");
-            let clipboardRes = await navigator.clipboard.writeText(""+ this.state.sessionID);
+             await navigator.clipboard.writeText(""+ this.state.sessionID);
         }catch(e){
             console.log(e)
         }
