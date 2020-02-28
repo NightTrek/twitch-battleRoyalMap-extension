@@ -172,8 +172,9 @@ class SessionTree extends Component {
 
     render() {
         return (
-            <div className={"grey"}>
+            <div>
                 {this.showTree() ? (
+                    <div className={"flexContainer"}>
                         <div className={"flexRow"}>
                             <div className={"flexRow"}>
                                 <div className={'sessionTreeButton'} onClick={this.newSessionButton} >
@@ -186,6 +187,10 @@ class SessionTree extends Component {
                                 </div>
                             </div>
                         </div>
+                        <div className={""}>
+
+                        </div>
+                    </div>
                 ):(
                     <ShowSessionAPI state={this.state}  sessionValidHandler={this.sessionValidHandler} startSessionHandler={this.startSessionHandler}
                                     validateSession={this.validateSession} startNewSession={this.startNewSession} backButton={this.backToSessionTree}/>

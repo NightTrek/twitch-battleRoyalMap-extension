@@ -14,7 +14,7 @@ const sideDrawer = props => {
         <nav className= {drawerClasses}>
             <ul>
                 <Userinfo userData={props.userData} />
-                <li> USER NAME</li>
+                {/*<li> USER NAME</li>*/}
                 <li><a href="/">Home</a></li>
                 <li><a href="/map">MAP</a></li>
                 <li><a href="/">STREAMER</a></li>

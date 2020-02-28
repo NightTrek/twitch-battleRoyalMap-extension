@@ -43,15 +43,15 @@ class Userinfo extends React.Component  {
         <div>
           {!isLoading ? (
               <div>
-                  <h2>{this.state.user.login}</h2>
                   <div>
                       <img src={this.state.user.profile_image_url} alt={"profilepic"} width={"50%"}/>
                   </div>
+                  <h3>{this.state.user.login}</h3>
                   <p>{this.state.user.email}</p>
                   <hr />
               </div>
           ) : (
-            <p>Loading...</p>
+            <p>Login for account Access</p>
           )}
         </div>
       </React.Fragment>

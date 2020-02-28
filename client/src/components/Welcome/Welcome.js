@@ -7,14 +7,11 @@ import SlideImages from '../Slideimages/Slideimages'
 //import react components
 
 
-import Row from '../Partials/Row';
 
 
 class Welcome extends Component {
 
     render() {
-
-        console.log(this.props);
         return(
             <div className={"flexContainer pageContainer"} style={{margin:"70px auto"}}>
                     <h1>Vote your Landing</h1>

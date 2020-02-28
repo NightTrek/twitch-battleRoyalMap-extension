@@ -13,9 +13,11 @@
 }
 
 .grey{
-    background-color: #4a4947;
+    background: linear-gradient(to bottom, white 50%, #9147FF 100%);
+    width: 100%;
+    height: 256px;
+    margin-top:128px;
 }
-
 .sessionTreeButton{
     width: 300px;
     height:348px;

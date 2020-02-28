@@ -19,12 +19,11 @@ class NavBarHeader extends Component {
     }
 
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-      this.mapUserInfoToState(prevProps,prevState);
-  }
 
     mapUserInfoToState(props, prevState){
-      // console.log(prevState.auth);
+      console.log(`trying to map auth data to navbar header`);
+      console.log(props.auth.data);
+      console.log(prevState.auth);
       if(prevState.auth !== null && props.auth.data){
           console.log("maping auth to state");
           let currentState = this.state;
@@ -36,6 +35,10 @@ class NavBarHeader extends Component {
 
 drawerToggleClickHandler = (props) => {
     let currentState = this.state;
+    //here we are checking for the auth prop from redux to try and show account info in the sideDrawer
+    if(this.state.auth === null && this.props.auth !== undefined && this.props.auth !== null ){
+        currentState.auth = this.props.auth.data[0];
+    }
     currentState.sideDrawerOpen = !this.state.sideDrawerOpen;
     this.setState(currentState);
 };
@@ -45,17 +48,21 @@ backdropClickHandler =() => {
 };
 
 render() {
-    let backdrop;
-
-    if (this.state.sideDrawerOpen) {
-        backdrop = <Backdrop click={this.backdropClickHandler}/>;
-    }
-    // console.log(this.props);
+    //Here we either render the sideDrawer with or without the backdrop
     return(
       <div style={{height: '100%'}} className={"bg-info"}>
-      <Toolbar drawerClickHandler={this.drawerToggleClickHandler}/>
-      <SideDrawer show={this.state.sideDrawerOpen} userData={this.state.auth}/>
-      {backdrop}
+          {this.state.sideDrawerOpen ? (
+              <div>
+              <Toolbar drawerClickHandler={this.drawerToggleClickHandler}/>
+              <SideDrawer show={this.state.sideDrawerOpen} userData={this.state.auth}/>
+              <Backdrop click={this.backdropClickHandler}/>
+              </div>
+          ):(
+              <div>
+                  <Toolbar drawerClickHandler={this.drawerToggleClickHandler}/>
+                  <SideDrawer show={this.state.sideDrawerOpen} userData={this.state.auth}/>
+              </div>
+          )}
       </div>
         );
     }
