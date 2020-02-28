@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import Container from '../../components/Partials/Container';
-// import Column from '../../components/Partials/Column';
-// import Row from '../../components/Partials/Row';
+
 import Fmap from '../mapComponent/Fmap';
 import {connect} from "react-redux";
 import * as actions from "../../actions";
@@ -16,9 +14,7 @@ class Map extends Component {
     render() {
         return (
             <div>
-                <Container>
                     <Fmap/>
-                </Container>
             </div>
         );
     }
@@ -29,4 +25,3 @@ function mapStateToProps(state){
 
 export default connect(mapStateToProps, actions)(Map);
 
-// export default ;

@@ -26,7 +26,7 @@ class CountDown extends Component {
         }
     }
 
-    componentDidUnmount() {
+    componentWillUnmount() {
         clearInterval(this.timeout);
     }
 

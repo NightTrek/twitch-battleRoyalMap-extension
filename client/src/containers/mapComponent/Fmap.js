@@ -4,6 +4,10 @@ import moment from "moment";
 import fortniteMap from "../../img/FORTNITESEASON10MAP.jpg"
 import {connect} from "react-redux";
 import * as actions from "../../actions";
+import CountDown from "../CountDown/CountDown";
+
+
+import "../PostAuth/PostAuth.css";
 
 const startingData = [{ x: 0, y: 0, amount: 30 },
     { x: 50, y: 55, amount: 40 },
@@ -45,10 +49,12 @@ class Fmap extends Component {
             imgCoords: {x:0,y:0}
         };
 
+        this.doubleClick = this.doubleClick.bind(this);
         this.mouseDown = this.mouseDown.bind(this);
         this.mouseMove = this.mouseMove.bind(this);
+        this.copyLink = this.copyLink.bind(this);
         this.mouseUp = this.mouseUp.bind(this);
-        this.doubleClick = this.doubleClick.bind(this);
+
 
 
     }
@@ -135,6 +141,10 @@ class Fmap extends Component {
         console.log("mouse up ")
     }
 
+    endSession(){
+        //TODO when the time runs out end the session
+    }
+
 
     async doubleClick(evt){
         let currentState = this.state;
@@ -178,13 +188,38 @@ class Fmap extends Component {
 
     }
 
-//transparent or rgba(0, 0, 0, 0)
+    //copy The sesion id from state to the users clipboard
+    async copyLink(){
+        try{
+            console.log("trying to copy");
+            await navigator.clipboard.writeText(""+ this.props.sessionID);
+        }catch(e){
+            console.log(e)
+        }
+    }
+
+
     render() {
         return (
             <div>
-                <canvas ref="canvas" width={800} height={800}
-                        onMouseDown={this.mouseDown} onMouseMove={this.mouseMove}
-                        onDoubleClick={this.doubleClick}/>
+                <div className={"flexContainer mapbox"} style={{width:860}}>
+                    <div className={"flexRow topBar"}>
+                        <CountDown timeleft={this.props.sessionTimeRemaining}/>
+                        <div className={"spacer"}>
+                        </div>
+                        <h5>Session ID:</h5>
+                        <h5>{this.props.sessionID}</h5>
+                    </div>
+                    <div className={"flexRow topBar"}>
+                        <button className={"cpButton"} onClick={this.props.backToSessionTree}>Back</button>
+                        <div className={"spacer"}>
+                        </div>
+                        <button className={"cpButton"} onClick={this.copyLink}>copy ID</button>
+                    </div>
+                    <canvas ref="canvas" width={800} height={800}
+                            onMouseDown={this.mouseDown} onMouseMove={this.mouseMove}
+                            onDoubleClick={this.doubleClick}/>
+                </div>
             </div>
         );
     }

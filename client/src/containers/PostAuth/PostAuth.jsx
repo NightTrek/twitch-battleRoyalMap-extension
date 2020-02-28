@@ -23,7 +23,7 @@ class PostAuth extends Component {
         };
 
         this.backToSessionTree = this.backToSessionTree.bind(this);
-        this.copyLink = this.copyLink.bind(this);
+
     }
     componentDidMount() {
         this.props.signin()
@@ -36,15 +36,7 @@ class PostAuth extends Component {
         }
     }
 
-//copy The sesion id from state to the users clipboard
-    async copyLink(){
-        try{
-            console.log("trying to copy");
-             await navigator.clipboard.writeText(""+ this.state.sessionID);
-        }catch(e){
-            console.log(e)
-        }
-    }
+
     backToSessionTree(){
         let cstate = this.state;
         cstate.showMap = false;
@@ -55,21 +47,10 @@ class PostAuth extends Component {
         return (
             <div className="PostAuthC">
                     {this.state.showMap ? (
-                        <div className={"flexContainer mapbox"} style={{width:860}}>
-                            <div className={"flexRow topBar"}>
-                                <CountDown timeleft={this.state.sessionTimeRemaining}/>
-                                <div className={"spacer"}>
-                                </div>
-                                <h5>Session ID:</h5>
-                                <h5>{this.state.sessionID}</h5>
-                            </div>
-                            <div className={"flexRow topBar"}>
-                                <button className={"cpButton"} onClick={this.backToSessionTree}>Back</button>
-                                <div className={"spacer"}>
-                                </div>
-                                <button className={"cpButton"} onClick={this.copyLink}>copy ID</button>
-                            </div>
-                            <Fmap sessionID={this.state.sessionID} voteArray={this.state.voteArray}/>
+                        <div className={"flexContainer"} style={{width:860}}>
+                            <Fmap sessionID={this.state.sessionID} voteArray={this.state.voteArray}
+                                  sessionTimeRemaining={this.state.sessionTimeRemaining}
+                                  backToSessionTree={this.backToSessionTree}/>
                         </div>
                     ) : (
                         <SessionTree  that={this}/>
