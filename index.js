@@ -28,7 +28,7 @@ const cors = require('cors');
 
 
 try{
-    mongoose.connect('mongodb://localhost:twitch/vote-your-landing', { useNewUrlParser: true, useCreateIndex: true });
+    mongoose.connect('mongodb://Master:Apz^zvB!eRtm!i9t@tU3Op0*8bHH9Z6g@ds059145.mlab.com:59145/heroku_09s1llng', { useNewUrlParser: true, useCreateIndex: true });
     console.log("mongo connected")
 }catch(err){//
     console.log(err);
