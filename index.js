@@ -132,7 +132,7 @@ app.use(express.urlencoded({extended: true}));
 app.get('/auth/twitch', passport.authenticate('twitch', { scope: 'user:read:email' }));
 
 // Set route for OAuth redirect CHANGE THE REDIRECT LINK
-app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedirect: 'https://vote-your-landing.herokuapp.com/auth/success', failureRedirect: '/' }));
+app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedirect: 'https://vote-your-landing.herokuapp.com/auth/success', failureRedirect: 'https://vote-your-landing.herokuapp.com/' }));
 
 
 

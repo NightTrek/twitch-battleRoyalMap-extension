@@ -36,12 +36,12 @@ class Welcome extends Component {
                         </div>
                     </div>
                     <div className={"flexRow"}>
-                            <a className ="startButton" href='https://vote-your-landing.herokuapp.com:3001/auth/twitch'>
+                            <a className ="startButton" href='https://vote-your-landing.herokuapp.com/auth/twitch'>
                                 {/*<Button className={"button-Start"} >Push button to start</Button>{' '}*/}
                                <h3 className={"btn-text"}> Start Voting Now</h3>
                             </a>
                     </div>
-                        {/*<a href='https://vote-your-landing.herokuapp.com/:3001/auth/twitch'><button>Start</button></a>*/}
+                        {/*<a href='https://vote-your-landing.herokuapp.com/auth/twitch'><button>Start</button></a>*/}
                     <div className={"flexRow"}>
                         <SlideImages />
                     </div>
