@@ -21,7 +21,7 @@ const routes        = require('./routes');
 const TWITCH_CLIENT_ID = config.clientId;
 const TWITCH_SECRET    = config.clientSecret;
 const SESSION_SECRET   = config.secret;
-const CALLBACK_URL     = 'http://localhost:3001/auth/twitch/callback';  // You can run locally with - http://localhost:3000/auth/twitch/callback
+const CALLBACK_URL     = 'https://vote-your-landing.herokuapp.com/auth/twitch/callback';  // You can run locally with - http://localhost:3000/auth/twitch/callback
 
 const cors = require('cors');
 //start db connection
