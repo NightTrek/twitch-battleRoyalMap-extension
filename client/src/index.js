@@ -13,6 +13,7 @@ import Welcome from "./components/Welcome/Welcome";
 import PostAuth from "./containers/PostAuth/PostAuth";
 import Map from "./containers/Map/Map";
 import reducers from './reducers';
+import AuthModal from "./containers/AuthModal/AuthModal";
 
 
 
@@ -25,6 +26,9 @@ const store = createStore(
     auth: { authenticated: localStorage.getItem('token')}
   },
   composeEnhancers(applyMiddleware(reduxThunk)));
+
+
+
 
 ReactDOM.render(
   <Provider store={store}>

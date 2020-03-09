@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import { signin} from "../../actions";
 import { connect } from 'react-redux';
 import SlideImages from '../Slideimages/Slideimages'
+import axios from "axios";
+import AuthModal from "../../containers/AuthModal/AuthModal";
 
 
 //import react components
@@ -10,6 +12,21 @@ import SlideImages from '../Slideimages/Slideimages'
 
 
 class Welcome extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            showAuthModal:false
+        };
+
+        this.showAuthModal = this.showAuthModal.bind(this);
+    }
+
+    showAuthModal(){
+        if(this.state.auth === null || this.props.auth == undefined && this.props.auth !== null && this.props.auth.data !== undefined){
+
+        }
+    }
 
     render() {
         return(
@@ -35,20 +52,29 @@ class Welcome extends Component {
                                 </ul>
                         </div>
                     </div>
-                    <div className={"flexRow"}>
-                            <a className ="startButton" href='http://localhost:3001/auth/twitch'>
+                {this.state.showAuthModal ? (<AuthModal/>) :
+                    (
+                        <div className={"flexRow"}>
+                            <div className ="startButton"  >
                                 {/*<Button className={"button-Start"} >Push button to start</Button>{' '}*/}
-                               <h3 className={"btn-text"}> Start Voting Now</h3>
-                            </a>
-                    </div>
+                                <h3 className={"btn-text"}> Start Voting Now</h3>
+                            </div>
+                        </div>
+                    )}
+
                         {/*<a href='http://localhost:3001/auth/twitch'><button>Start</button></a>*/}
                     <div className={"flexRow"}>
-                        <SlideImages />
+                        <div className={"flexContainer sliderContainer"}>
+                            <SlideImages />
+                        </div>
                     </div>
             </div>
         );
 }
 }
+function mapStateToProps(state){
+    return { auth: state.auth.authenticated }
+}
 
-export default connect(null, { signin })(Welcome);
+export default connect(mapStateToProps, { signin })(Welcome);
 

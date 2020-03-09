@@ -143,6 +143,7 @@ class Fmap extends Component {
 
     endSession(){
         //TODO when the time runs out end the session
+        //TODO Change font to something other than defualt
     }
 
 

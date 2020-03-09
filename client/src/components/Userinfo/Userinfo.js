@@ -51,7 +51,7 @@ class Userinfo extends React.Component  {
                   <hr />
               </div>
           ) : (
-            <p>Login for account Access</p>
+            <p>Press Start to Access</p>
           )}
         </div>
       </React.Fragment>

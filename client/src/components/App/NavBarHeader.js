@@ -36,7 +36,8 @@ class NavBarHeader extends Component {
 drawerToggleClickHandler = (props) => {
     let currentState = this.state;
     //here we are checking for the auth prop from redux to try and show account info in the sideDrawer
-    if(this.state.auth === null && this.props.auth !== undefined && this.props.auth !== null ){
+    console.log(JSON.stringify(this.props.auth));
+    if(this.props.auth !== undefined && this.props.auth !== null && this.props.auth.data !== undefined){
         currentState.auth = this.props.auth.data[0];
     }
     currentState.sideDrawerOpen = !this.state.sideDrawerOpen;

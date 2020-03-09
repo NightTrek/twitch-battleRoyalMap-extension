@@ -9,7 +9,7 @@ const morgan         = require('morgan');
 const winston        = require('winston');
 const logger         = require('./logs/Wlogger');
 const mongoose       = require('mongoose');
-
+const moment         = require('moment');
 //local files
 const config         = require("./config");
 const User          = require('./model/User');
@@ -28,7 +28,7 @@ const cors = require('cors');
 
 
 try{
-    mongoose.connect('mongodb://localhost:twitch/vote-your-landing', { useNewUrlParser: true, useCreateIndex: true });
+    mongoose.connect('mongodb://localhost:twitch/vote-your-landing', { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
     console.log("mongo connected")
 }catch(err){//
     console.log(err);
@@ -39,81 +39,9 @@ try{
 let app = express();
 
 
-// Override passport profile function to get user profile from Twitch API
-OAuth2Strategy.prototype.userProfile = function(accessToken, done) {
-    let options = {
-        url: 'https://api.twitch.tv/helix/users',
-        method: 'GET',
-        headers: {
-            'Client-ID': TWITCH_CLIENT_ID,
-            'Accept': 'application/vnd.twitchtv.v5+json',
-            'Authorization': 'Bearer ' + accessToken
-        }
-    };
+const allowedOrigins = ["http://localhost:3000","http://localhost:3001", "ttps://vote-your-landing.herokuapp.com"];
 
-    request(options, async function (error, response, body) {
-        if (response && response.statusCode == 200) {
 
-            done(null, JSON.parse(body));
-        } else {
-            done(JSON.parse(body));
-        }
-    });
-}
-
-passport.serializeUser(function(user, done) {
-    done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-    done(null, user);
-});
-
-passport.use('twitch', new OAuth2Strategy({
-        authorizationURL: 'https://id.twitch.tv/oauth2/authorize',
-        tokenURL: 'https://id.twitch.tv/oauth2/token',
-        clientID: TWITCH_CLIENT_ID,
-        clientSecret: TWITCH_SECRET,
-        callbackURL: CALLBACK_URL,
-        state: true
-    },
-    async function(accessToken, refreshToken, profile, done) {
-        profile.accessToken = accessToken;
-        profile.refreshToken = refreshToken;
-        console.log(profile)
-
-        try{
-            let isUser = await User.find({email:profile.data[0].email})
-            console.log(`is user is ================================================
-        =========== ${isUser} =======================================================`);
-            if(isUser == " " || isUser == ""||isUser == null) {
-                let newUser = await User.create({
-                    email: profile.data[0].email,
-                    username: profile.data[0].display_name,
-                    profileImg: profile.data[0].profile_image_url,
-                    view_count: profile.view_count,
-                    accessToken: profile.accessToken,
-                    refreshToken: profile.refreshToken
-                });
-                console.log(newUser);
-                logger.log({
-                    level: 'info',
-                    message: "LOGGING NEW USER"+JSON.stringify(newUser)
-                });
-            }else{
-                logger.log({
-                    level: 'info',
-                    message: "LOGGING USER"+JSON.stringify(isUser)
-                });
-            }
-
-        }catch(err){
-            console.log(err)
-        }
-
-        done(null, profile);
-    }
-));
 
 
 
@@ -122,39 +50,23 @@ app.use(morgan('combined'));
 app.use(express.static('public'));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 
-
-// Set route to start OAuth link, this is where you define scopes to request
-app.get('/auth/twitch', passport.authenticate('twitch', { scope: 'user:read:email' }));
-
-// Set route for OAuth redirect CHANGE THE REDIRECT LINK
-app.get('/auth/twitch/callback', passport.authenticate('twitch', { successRedirect: 'http://localhost:3000/auth/success', failureRedirect: '/' }));
-
-
-
-app.get('/auth/user', function (req, res) {
-    console.log("Auth hit");
-    try{
-        const key = Object.keys(req.sessionStore.sessions)[0];
-        // console.log(req.sessionStore.sessions);
-        console.log(key);
-        const obj = JSON.parse(req.sessionStore.sessions[key]);
-        res.send(obj.passport.user);
-    }catch(err){
-        logger.log({
-            level: 'error',
-            message: "/auth/user ERROR "+err
-        });
-        res.send("error 500 auth order error mostlikly check loggs for details")
-        console.log(err);//
+app.use(cors({
+    origin: function(origin, callback){
+        // allow requests with no origin
+        // (like mobile apps or curl requests)
+        if(!origin) return callback(null, true);
+        if(allowedOrigins.indexOf(origin) === -1){
+            let msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin. per custom set CORS policy';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
     }
-
-});
-
+}));
 
 app.use(routes);
 
@@ -167,14 +79,14 @@ app.use(routes);
 // // This folder is created during production
 if(process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
-    logger.add(new winston.transports.Console({
-        format: winston.format.simple()
-    }));
+    // logger.add(new winston.transports.Console({
+    //     format: winston.format.simple()
+    // }));
 }
 
 // // Server setup
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, function () {
-    console.log(`Twitch auth sample listening on port ${PORT}`)
+    console.log(`Twitch auth listening on port ${PORT}`)
 });

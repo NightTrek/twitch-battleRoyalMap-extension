@@ -7,7 +7,6 @@ import * as actions from '../../actions';
 import './PostAuth.css'
 import SessionTree from "../SessionTree/SessionTree";
 import Fmap from '../mapComponent/Fmap';
-import CountDown from "../CountDown/CountDown";
 
 class PostAuth extends Component {
 
