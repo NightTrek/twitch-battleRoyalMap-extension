@@ -68,23 +68,7 @@ class Fmap extends Component {
         let currentState = this.state;
         currentState.canvasRef = ctx;
         currentState.canvas = canvas;
-        // currentState.heatmap = h337.create({
-        //     container: document.querySelector('.heatmap'),
-        //     radius: 50
-        // });
-        // let nuConfig = {
-        //     maxOpacity: .8,
-        //     minOpacity: 0.2,
-        //     blur: .85,
-        //     gradient: {
-        //         // enter n keys between 0 and 1 here
-        //         // for gradient color customization
-        //         '.5': 'blue',
-        //         '.8': 'red',
-        //         '.95': 'white'
-        //     }
-        // };
-        // currentState.heatmap.configure(nuConfig);
+
         this.setState(currentState);
         this.updateCanvas();
         this.mapUserInfoToState(this.props, this.state);
@@ -228,7 +212,23 @@ class Fmap extends Component {
     createHeatMap(){
         console.log("creating heatmap...");
         let cstate = this.state;
-
+        cstate.heatmap = h337.create({
+            container: document.querySelector('.heatmap'),
+            radius: 50
+        });
+        let nuConfig = {
+            maxOpacity: .8,
+            minOpacity: 0.2,
+            blur: .85,
+            gradient: {
+                // enter n keys between 0 and 1 here
+                // for gradient color customization
+                '.5': 'blue',
+                '.8': 'red',
+                '.95': 'white'
+            }
+        };
+        cstate.heatmap.configure(nuConfig);
         let heatMapData = {
             max: 100,
             min: 0,
