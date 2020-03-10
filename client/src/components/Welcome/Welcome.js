@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import { signin} from "../../actions";
 import { connect } from 'react-redux';
 import SlideImages from '../Slideimages/Slideimages'
-import axios from "axios";
-import AuthModal from "../../containers/AuthModal/AuthModal";
+import * as actions from '../../actions';
+// import axios from "axios";
+// import AuthModal from "../../containers/AuthModal/AuthModal";
 
 
 //import react components
@@ -16,16 +16,27 @@ class Welcome extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showAuthModal:false
+            showAuthModal:false,
+            auth:null
         };
+        this.reLogin = this.reLogin.bind(this);
 
-        this.showAuthModal = this.showAuthModal.bind(this);
+    }
+    componentDidMount() {
+        let cState = this.state;
+        if(this.props.auth !== undefined && this.props.auth !== null){
+            let authToken = JSON.parse(this.props.auth);
+            if(authToken.data !== undefined){
+                cState.auth = authToken;
+                cState.showAuthModal = true;
+
+            }
+        }
+        this.setState(cState);
     }
 
-    showAuthModal(){
-        if(this.state.auth === null || this.props.auth == undefined && this.props.auth !== null && this.props.auth.data !== undefined){
-
-        }
+    reLogin(){
+        this.props.history.push('/auth/success')
     }
 
     render() {
@@ -52,17 +63,20 @@ class Welcome extends Component {
                                 </ul>
                         </div>
                     </div>
-                {this.state.showAuthModal ? (<AuthModal/>) :
-                    (
+                {this.state.showAuthModal ? (
+                    <div className={"flexRow"}>
+                        <div className={"startButton"} onClick={this.reLogin}>
+                            <h3 className={"btn-text"}> Start Voting Now</h3>
+                        </div>
+                    </div>
+                ) :(
                         <div className={"flexRow"}>
-                            <div className ="startButton"  >
+                            <div className ="startButton">
                                 {/*<Button className={"button-Start"} >Push button to start</Button>{' '}*/}
-                                <h3 className={"btn-text"}> Start Voting Now</h3>
+                                <a href={"http://localhost:3001/auth/twitch"}> <h3 className={"btn-text"}> Start Voting Now</h3></a>
                             </div>
                         </div>
                     )}
-
-                        {/*<a href='http://localhost:3001/auth/twitch'><button>Start</button></a>*/}
                     <div className={"flexRow"}>
                         <div className={"flexContainer sliderContainer"}>
                             <SlideImages />
@@ -76,5 +90,5 @@ function mapStateToProps(state){
     return { auth: state.auth.authenticated }
 }
 
-export default connect(mapStateToProps, { signin })(Welcome);
+export default connect(mapStateToProps, actions)(Welcome);
 

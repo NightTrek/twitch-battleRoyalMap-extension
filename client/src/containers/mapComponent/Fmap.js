@@ -5,7 +5,7 @@ import fortniteMap from "../../img/FORTNITESEASON10MAP.jpg"
 import {connect} from "react-redux";
 import * as actions from "../../actions";
 import CountDown from "../CountDown/CountDown";
-
+import h337 from "heatmap.js";
 
 import "../PostAuth/PostAuth.css";
 
@@ -46,9 +46,11 @@ class Fmap extends Component {
             currentMap: mapIMG,
             canvasRef:{},
             canvas:canvas,
-            imgCoords: {x:0,y:0}
+            imgCoords: {x:0,y:0},
+            heatmap:null
         };
 
+        this.createHeatMap = this.createHeatMap.bind(this);
         this.doubleClick = this.doubleClick.bind(this);
         this.mouseDown = this.mouseDown.bind(this);
         this.mouseMove = this.mouseMove.bind(this);
@@ -66,6 +68,23 @@ class Fmap extends Component {
         let currentState = this.state;
         currentState.canvasRef = ctx;
         currentState.canvas = canvas;
+        // currentState.heatmap = h337.create({
+        //     container: document.querySelector('.heatmap'),
+        //     radius: 50
+        // });
+        // let nuConfig = {
+        //     maxOpacity: .8,
+        //     minOpacity: 0.2,
+        //     blur: .85,
+        //     gradient: {
+        //         // enter n keys between 0 and 1 here
+        //         // for gradient color customization
+        //         '.5': 'blue',
+        //         '.8': 'red',
+        //         '.95': 'white'
+        //     }
+        // };
+        // currentState.heatmap.configure(nuConfig);
         this.setState(currentState);
         this.updateCanvas();
         this.mapUserInfoToState(this.props, this.state);
@@ -102,6 +121,12 @@ class Fmap extends Component {
             this.state.coordsArray.map( (item)=>{
                 return ctx.fillRect(item.x, item.y,10,10);
             });
+            // let heatMapData = {
+            // max: 100,
+            // min: 0,
+            // data: this.state.coordsArray
+            // };
+            // this.state.heatmap.setData(heatMapData);
             //show development cursor
         if(this.state.canVote !== true){
             ctx.fillStyle = "#00ff45";
@@ -121,7 +146,7 @@ class Fmap extends Component {
         let newlastY = evt.nativeEvent.offsetY;
         // console.log(`evt X ${evt.pageX} evt Y ${evt.pageY}  actual value X ${newlastX}  Y ${newlastY}`);
         let currentState = this.state;
-        currentState.currentVote = {x:newlastX, y:newlastY, z:1};
+        currentState.currentVote = {x:newlastX, y:newlastY, value:1};
         this.setState(currentState);
         // console.log(this.state);
     }
@@ -132,7 +157,7 @@ class Fmap extends Component {
         let newlastY = evt.nativeEvent.offsetY || (evt.pageY - this.state.canvas.offsetTop-70);
         // console.log(`offsetX ${evt.nativeEvent.offsetX} offsetY ${evt.nativeEvent.offsetY}  pageX ${evt.pageX} pageY ${evt.pageY} `);
         let currentState = this.state;
-        currentState.currentVote = {x:newlastX, y:newlastY, z:1};
+        currentState.currentVote = {x:newlastX, y:newlastY, value:30};
         this.setState(currentState);
         this.updateCanvas();
     }
@@ -154,6 +179,7 @@ class Fmap extends Component {
                 let response = await this.sendVote(currentState.currentVote);
                 console.log(response);
                 currentState.coordsArray = response.voteArray;
+
             }
             catch(err){
                 console.log(err);
@@ -199,13 +225,27 @@ class Fmap extends Component {
         }
     }
 
+    createHeatMap(){
+        console.log("creating heatmap...");
+        let cstate = this.state;
+
+        let heatMapData = {
+            max: 100,
+            min: 0,
+            data: cstate.coordsArray
+        };
+        cstate.heatmap.setData(heatMapData);
+        console.log(cstate.heatmap.getDataURL());
+        this.setState(cstate);
+    }
+
 
     render() {
         return (
             <div>
                 <div className={"flexContainer mapbox"} style={{width:860}}>
                     <div className={"flexRow topBar"}>
-                        <CountDown timeleft={this.props.sessionTimeRemaining}/>
+                        <CountDown timeleft={this.props.sessionTimeRemaining} callback={this.createHeatMap}/>
                         <div className={"spacer"}>
                         </div>
                         <h5>Session ID:</h5>
@@ -217,9 +257,12 @@ class Fmap extends Component {
                         </div>
                         <button className={"cpButton"} onClick={this.copyLink}>copy ID</button>
                     </div>
-                    <canvas ref="canvas" width={800} height={800}
-                            onMouseDown={this.mouseDown} onMouseMove={this.mouseMove}
-                            onDoubleClick={this.doubleClick}/>
+                    <div className={"heatmap"}>
+                        <canvas ref="canvas" className={"heatmap"} width={800} height={800}
+                                onMouseDown={this.mouseDown} onMouseMove={this.mouseMove}
+                                onDoubleClick={this.doubleClick}/>
+                    </div>
+
                 </div>
             </div>
         );

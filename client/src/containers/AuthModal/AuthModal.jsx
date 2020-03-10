@@ -21,7 +21,7 @@ class AuthModal extends Component {
         return (
             <div className={"flexColumn"}>
                 <div className={"flexRow"}>
-                    <iframe src={"http://localhost:3001/auth/twitch"} className={"authFrame"}> </iframe>
+                    <iframe src={"http://localhost:3001/auth/twitch"} className={"authFrame"} title={"Twitch Authentication Window"} referrerpolicy={"unsafe-url"}> </iframe>
                 </div>
             </div>
         );
