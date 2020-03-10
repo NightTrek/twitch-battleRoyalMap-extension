@@ -43,6 +43,7 @@ class Fmap extends Component {
             coordsArray: currentVoteArray,
             currentVote: {},
             canVote:true,
+            showBasicVotes:true,
             currentMap: mapIMG,
             canvasRef:{},
             canvas:canvas,
@@ -102,9 +103,12 @@ class Fmap extends Component {
             ctx.drawImage(this.state.currentMap,0,0, canvas.width, canvas.height);
             //add the array of Votes
             ctx.fillStyle = "#ff0000";
-            this.state.coordsArray.map( (item)=>{
-                return ctx.fillRect(item.x, item.y,10,10);
-            });
+            if(this.state.showBasicVotes){
+                this.state.coordsArray.map( (item)=>{
+                    return ctx.fillRect(item.x, item.y,10,10);
+                });
+            }
+
             // let heatMapData = {
             // max: 100,
             // min: 0,
@@ -112,13 +116,13 @@ class Fmap extends Component {
             // };
             // this.state.heatmap.setData(heatMapData);
             //show development cursor
-        if(this.state.canVote !== true){
-            ctx.fillStyle = "#00ff45";
-            ctx.fillRect(this.state.currentVote.x+this.state.imgCoords.x, this.state.currentVote.y+this.state.imgCoords.y,25,25);
-        }else {
-            ctx.fillStyle = "#00ff45";
-            ctx.fillRect(this.state.currentVote.x + this.state.imgCoords.x, this.state.currentVote.y + this.state.imgCoords.y, 5, 5);
-        }
+        // if(this.state.canVote !== true){
+        //     ctx.fillStyle = "#00ff45";
+        //     ctx.fillRect(this.state.currentVote.x+this.state.imgCoords.x, this.state.currentVote.y+this.state.imgCoords.y,25,25);
+        // }else {
+        //     ctx.fillStyle = "#00ff45";
+        //     ctx.fillRect(this.state.currentVote.x + this.state.imgCoords.x, this.state.currentVote.y + this.state.imgCoords.y, 5, 5);
+        // }
 
 
     }
@@ -223,9 +227,9 @@ class Fmap extends Component {
             gradient: {
                 // enter n keys between 0 and 1 here
                 // for gradient color customization
-                '.5': 'blue',
-                '.8': 'red',
-                '.95': 'white'
+                '.3': 'blue',
+                '.4': 'red',
+                '.8': 'green'
             }
         };
         cstate.heatmap.configure(nuConfig);
@@ -235,6 +239,7 @@ class Fmap extends Component {
             data: cstate.coordsArray
         };
         cstate.heatmap.setData(heatMapData);
+        cstate.showBasicVotes = false;
         console.log(cstate.heatmap.getDataURL());
         this.setState(cstate);
     }
