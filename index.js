@@ -30,12 +30,13 @@ const cors = require('cors');
 try{
 if(process.env.NODE_ENV === 'production'){
     console.log("connecting to mongo in production"); // manual connect using mongo ds121135.mlab.com:21135/heroku_xnx6clq0 -u master -p Apz^zvB!eRtm!i9t@tU3Op0*8bHH9Z6g
-    mongoose.connect('mongodb://master:Apz^zvB!eRtm!i9t@tU3Op0*8bHH9Z6g@ds121135.mlab.com:21135/heroku_xnx6clq0', { useNewUrlParser: true, useCreateIndex: true });
+    mongoose.connect('mongodb://master:U9kD7PhvUiBcDbSllhPmmOE6VgSVs7yj@ds121135.mlab.com:21135/heroku_xnx6clq0', { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 }else{
     mongoose.connect('mongodb://localhost:twitch/vote-your-landing', { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 }
     console.log("mongo connected")
 }catch(err){//
+    console.log("error connectiong mongodb ======================");
     console.log(err);
 }
 
