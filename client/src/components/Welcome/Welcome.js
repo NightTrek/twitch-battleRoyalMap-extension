@@ -74,7 +74,7 @@ class Welcome extends Component {
                         <div className={"flexRow"}>
                             <div className ="startButton">
                                 {/*<Button className={"button-Start"} >Push button to start</Button>{' '}*/}
-                                <a href={'https://vote-your-landing.herokuapp.com/auth/twitch'}> <h3 className={"btn-text"}> Start Voting Now</h3></a>
+                                <a href={'https://vote-your-landing.herokuapp.com/auth/twitch'}> <h3 className={"btn-text"}> Login With Twitch to start voting</h3></a>
                             </div>
                         </div>
                     )}
