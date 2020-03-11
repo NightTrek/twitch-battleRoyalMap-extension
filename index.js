@@ -82,6 +82,7 @@ app.use(cors({
 // // If we are in production, serve our clients build folder.
 // // This folder is created during production
 if(process.env.NODE_ENV === 'production') {
+    console.log("use client build folder for production");
   app.use(express.static('client/build'));
     // logger.add(new winston.transports.Console({
     //     format: winston.format.simple()
