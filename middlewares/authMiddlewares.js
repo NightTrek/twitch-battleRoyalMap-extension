@@ -10,7 +10,13 @@ const logger        = require('../logs/Wlogger');
 const TWITCH_CLIENT_ID = config.clientId;
 const TWITCH_SECRET    = config.clientSecret;
 const SESSION_SECRET   = config.secret;
-const CALLBACK_URL     = 'http://localhost:3001/auth/twitch/callback';  // You can run locally with - http://localhost:3000/auth/twitch/callback
+
+if(process.env.NODE_ENV === 'production'){
+    const CALLBACK_URL     = 'http://vote-your-landing.herokuapp.com/auth/twitch/callback';  // You can run locally with - http://localhost:3000/auth/twitch/callback
+}
+else{
+    const CALLBACK_URL     = 'http://localhost:3001/auth/twitch/callback';  // You can run locally with - http://localhost:3000/auth/twitch/callback
+}
 
 
 // Override passport profile function to get user profile from Twitch API
