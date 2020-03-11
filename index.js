@@ -52,7 +52,7 @@ const allowedOrigins = ["http://localhost:3000","http://localhost:3001", "http:/
 
 app.use(session({secret: SESSION_SECRET, resave: false, saveUninitialized: false}));
 app.use(morgan('combined'));
-app.use(express.static('public'));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
@@ -73,7 +73,6 @@ app.use(cors({
     }
 }));
 
-app.use(routes);
 
 //
 
@@ -88,7 +87,11 @@ if(process.env.NODE_ENV === 'production') {
     //     format: winston.format.simple()
     // }));
 }
+// else{
+//     app.use(express.static('public'));
+// }
 
+app.use(routes);
 // // Server setup
 const PORT = process.env.PORT || 3001;
 
