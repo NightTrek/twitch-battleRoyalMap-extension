@@ -17,6 +17,7 @@ if(process.env.NODE_ENV === 'production'){
      CALLBACK_URL     = 'http://vote-your-landing.herokuapp.com/auth/twitch/callback';  // You can run locally with - http://localhost:3000/auth/twitch/callback
 }
 else{
+    console.log("using the Development CALLBACK URL =================================");
      CALLBACK_URL     = 'http://localhost:3001/auth/twitch/callback';  // You can run locally with - http://localhost:3000/auth/twitch/callback
 }
 
