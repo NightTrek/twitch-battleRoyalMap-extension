@@ -16,7 +16,7 @@ let SUCCESSFUL_LOGIN_URL;
 //force update comment...g
 if(process.env.NODE_ENV === 'production'){
      CALLBACK_URL     = 'http://vote-your-landing.herokuapp.com/auth/twitch/callback';  // You can run locally with - http://localhost:3000/auth/twitch/callback
-    SUCCESSFUL_LOGIN_URL = 'http://vote-your-landing.herokuapp.com/auth/success';
+    SUCCESSFUL_LOGIN_URL = 'http://vote-your-landing.herokuapp.com/';
 }
 else{
     console.log("using the Development CALLBACK URL =================================");
@@ -115,7 +115,7 @@ passport.use("twitch", new OAuth2Strategy({
 //twitch authentication
 const oAuthLogin =passport.authenticate("twitch", { scope: 'user:read:email' });
 
-const oAuthRedirect = passport.authenticate("twitch", { successRedirect: SUCCESSFUL_LOGIN_URL , failureRedirect: '/' });
+const oAuthRedirect = passport.authenticate("twitch", { successRedirect: '/' , failureRedirect: '/' });
 
 module.exports = {
   // requireAuth,

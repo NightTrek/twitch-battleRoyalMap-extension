@@ -83,10 +83,12 @@ app.use(cors({
 // // This folder is created during production
 if(process.env.NODE_ENV === 'production') {
     console.log("use client build folder for production");
-  app.use(express.static('client/build'));
-    // logger.add(new winston.transports.Console({
-    //     format: winston.format.simple()
-    // }));
+    const path = require('path')
+    app.use(express.static('client/build'));
+    app.use('/static', express.static(path.join(__dirname, '../build/static')))
+    app.get('/', (req, res) => {
+        res.sendFile(path.join(__dirname, '../build/'))
+    })
 }
 // else{
 //     app.use(express.static('public'));
