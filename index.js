@@ -95,7 +95,7 @@ passport.use('twitch', new OAuth2Strategy({
                     accessToken: profile.accessToken,
                     refreshToken: profile.refreshToken
                 });
-                console.log(newUser);
+                console.log(newUser);https://vote-your-landing.herokuapp.com/auth/twitch
                 logger.log({
                     level: 'info',
                     message: "LOGGING NEW USER"+JSON.stringify(newUser)
