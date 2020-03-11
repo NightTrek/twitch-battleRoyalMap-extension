@@ -20,6 +20,8 @@ class CountDown extends Component {
                     currentIdx=0
                     //TODO add action to complete when the timer runs out.
                     // this.props.SessionEnd()
+                    clearInterval(this.timeout);
+                    this.props.callback();
                 }
                 this.setState({ RemainingTime:currentIdx.toString() });
             }, 1000);

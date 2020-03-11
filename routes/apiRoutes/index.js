@@ -89,7 +89,7 @@ router.route('/sendvote')
              CurrentVotes[0].voteArray.push({
                 x:req.body.data.vote.x,
                 y:req.body.data.vote.y,
-                z:req.body.data.vote.z,
+                value:req.body.data.vote.value,
                 voterID:userID[0]._id
 
             });

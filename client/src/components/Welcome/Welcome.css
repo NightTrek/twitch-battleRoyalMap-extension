@@ -17,6 +17,9 @@ h1{
     flex-direction: row;
     margin-top:36px;
 }
+.sliderContainer{
+    width: 60vw;
+}
 
 .toast {
     width: 400px;

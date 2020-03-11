@@ -20,24 +20,26 @@ class NavBarHeader extends Component {
 
 
 
-    mapUserInfoToState(props, prevState){
-      console.log(`trying to map auth data to navbar header`);
-      console.log(props.auth.data);
-      console.log(prevState.auth);
-      if(prevState.auth !== null && props.auth.data){
-          console.log("maping auth to state");
-          let currentState = this.state;
-          currentState.auth = props.auth.data[0];
-          this.setState(currentState);
-      }
 
-  }
 
 drawerToggleClickHandler = (props) => {
+    console.log(`trying to map auth data to navbar header`);
     let currentState = this.state;
     //here we are checking for the auth prop from redux to try and show account info in the sideDrawer
-    if(this.state.auth === null && this.props.auth !== undefined && this.props.auth !== null ){
-        currentState.auth = this.props.auth.data[0];
+
+    if(this.props.auth !== undefined && this.props.auth !== null){
+        console.log(this.props.auth);
+        let authToken;
+        if(typeof this.props.auth === "string"){
+             authToken = JSON.parse(this.props.auth);
+        }
+        else{
+             authToken = this.props.auth;
+        }
+        if(authToken.data !== undefined){
+            currentState.auth = authToken.data[0];
+        }
+
     }
     currentState.sideDrawerOpen = !this.state.sideDrawerOpen;
     this.setState(currentState);

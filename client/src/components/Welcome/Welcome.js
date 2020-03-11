@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import { signin} from "../../actions";
 import { connect } from 'react-redux';
 import SlideImages from '../Slideimages/Slideimages'
+import * as actions from '../../actions';
+// import axios from "axios";
+// import AuthModal from "../../containers/AuthModal/AuthModal";
 
 
 //import react components
@@ -10,6 +12,32 @@ import SlideImages from '../Slideimages/Slideimages'
 
 
 class Welcome extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            showAuthModal:false,
+            auth:null
+        };
+        this.reLogin = this.reLogin.bind(this);
+
+    }
+    componentDidMount() {
+        let cState = this.state;
+        if(this.props.auth !== undefined && this.props.auth !== null){
+            let authToken = JSON.parse(this.props.auth);
+            if(authToken.data !== undefined){
+                cState.auth = authToken;
+                cState.showAuthModal = true;
+
+            }
+        }
+        this.setState(cState);
+    }
+
+    reLogin(){
+        this.props.history.push('/auth/success')
+    }
 
     render() {
         return(
@@ -35,20 +63,33 @@ class Welcome extends Component {
                                 </ul>
                         </div>
                     </div>
+                {this.state.showAuthModal ? (
                     <div className={"flexRow"}>
-                            <a className ="startButton" href='https://vote-your-landing.herokuapp.com/auth/twitch'>
-                                {/*<Button className={"button-Start"} >Push button to start</Button>{' '}*/}
-                               <h3 className={"btn-text"}> Start Voting Now</h3>
-                            </a>
+
+                        <div className={"startButton"} onClick={this.reLogin}>
+                            <h3 className={"btn-text"}> Start Voting Now</h3>
+                        </div>
                     </div>
-                        {/*<a href='https://vote-your-landing.herokuapp.com/auth/twitch'><button>Start</button></a>*/}
+                ) :(
+                        <div className={"flexRow"}>
+                            <div className ="startButton">
+                                {/*<Button className={"button-Start"} >Push button to start</Button>{' '}*/}
+                                <a href={"http://localhost:3001/auth/twitch"}> <h3 className={"btn-text"}> Start Voting Now</h3></a>
+                            </div>
+                        </div>
+                    )}
                     <div className={"flexRow"}>
-                        <SlideImages />
+                        <div className={"flexContainer sliderContainer"}>
+                            <SlideImages />
+                        </div>
                     </div>
             </div>
         );
 }
 }
+function mapStateToProps(state){
+    return { auth: state.auth.authenticated }
+}
 
-export default connect(null, { signin })(Welcome);
+export default connect(mapStateToProps, actions)(Welcome);
 

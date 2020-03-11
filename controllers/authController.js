@@ -43,5 +43,9 @@ module.exports = {
     // User already has given us their email and pass.
     // We just need to give them a token
     res.send({ token: tokenForUser(req.user)});
+  },
+
+  oAuthLogin:(req,res)=>{
+
   }
 };

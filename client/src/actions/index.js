@@ -16,20 +16,31 @@ export const signin = () => async dispatch => {
   // redux thunk allows us to return whatever we want
   // We can dispatch as many actions as we want as we now have access to dispatch
   // We can also make async requests inside of our actions thanks to redux-thunk
-  try {
-    const res = await axios.get('http://localhost:3001/auth/user');
-    // We are getting our token back from res.data.token
-    // We want to send this token to our reducer
-    console.log(res.data);
+  let localAuth = localStorage.getItem('token');
+  console.log(`local storage token ${localAuth}`);
+  if(localAuth !== undefined && localAuth !== null){
+    dispatch({ type: AUTH_USER, payload: JSON.parse(localAuth) });
+  }else{
+    try {
+      const res = await axios.get('http://localhost:3001/auth/user');
+      // We are getting our token back from res.data.token
+      // We want to send this token to our reducer
+      console.log("res.data");
+      console.log(res.data);
+      if(res.data !== "[Object, Object]" &&  res.data !== "Bad Credential") {
+        console.log("dispatch");
+        dispatch({ type: AUTH_USER, payload: res.data });
+        localStorage.setItem('token', JSON.stringify(res.data));
+      }
 
-    dispatch({ type: AUTH_USER, payload: res.data });
-    localStorage.setItem('token', res.data);
-    // callback();
-  } catch(e) {
-    // callback()
-    console.log(e);
-    // dispatch({ type: AUTH_ERROR, payload: 'Invalid login credentials' });
+      // callback();
+    } catch(e) {
+      // callback()
+      console.log(e);
+      // dispatch({ type: AUTH_ERROR, payload: 'Invalid login credentials' });
+    }
   }
+
 
 };
 
