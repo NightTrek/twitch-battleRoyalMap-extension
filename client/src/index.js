@@ -62,7 +62,7 @@ ReactDOM.render(
       <App>
         <Route exact path='/' component={Welcome}/>
         <Route exact path='/auth/success' component={PostAuth}/>
-        <PrivateRoute exact path='/vote' authToken={store.auth.authenticated} component={PostAuth}/>
+        <PrivateRoute exact path='/vote' authToken={store.auth} component={PostAuth}/>
       </App>
     </Router>
   </Provider>
