@@ -20,7 +20,7 @@ class PostAuth extends Component {
             newSessionTime:"",
             showMap:false
         };
-
+        window.localStorage.setItem("LoggedIn", null);
         this.backToSessionTree = this.backToSessionTree.bind(this);
 
     }

@@ -17,18 +17,25 @@ class Welcome extends Component {
         super(props);
         this.state = {
             showAuthModal:false,
-            auth:null
+            auth:null,
+            autoRedirectToVotePage:false
         };
+        this.firstTimeLogin = this.firstTimeLogin.bind(this);
         this.reLogin = this.reLogin.bind(this);
 
     }
     componentDidMount() {
         let cState = this.state;
+        let justLoggedIn = window.localStorage.getItem("LoggedIn");
         if(this.props.auth !== undefined && this.props.auth !== null){
             let authToken = JSON.parse(this.props.auth);
             if(authToken.data !== undefined){
                 cState.auth = authToken;
                 cState.showAuthModal = true;
+                console.log(`justLoggedIn ${justLoggedIn}`);
+                if(justLoggedIn){
+                    this.reLogin();
+                }
 
             }
         }
@@ -36,7 +43,12 @@ class Welcome extends Component {
     }
 
     reLogin(){
-        this.props.history.push('/auth/success')
+        this.props.history.push('/vote')
+    }
+
+    firstTimeLogin(){
+        window.localStorage.setItem("LoggedIn", "true");
+
     }
 
     render() {
@@ -72,7 +84,7 @@ class Welcome extends Component {
                     </div>
                 ) :(
                         <div className={"flexRow"}>
-                            <div className ="startButton">
+                            <div className ="startButton" onClick={this.firstTimeLogin}>
                                 {/*<Button className={"button-Start"} >Push button to start</Button>{' '}*/}
                                 <a href={'https://vote-your-landing.herokuapp.com/auth/twitch'}> <h3 className={"btn-text"}> Login With Twitch to start voting</h3></a>
                             </div>
