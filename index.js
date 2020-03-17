@@ -52,7 +52,6 @@ const allowedOrigins = ["http://localhost:3000","http://localhost:3001", "http:/
 
 app.use(session({secret: SESSION_SECRET, resave: false, saveUninitialized: false}));
 app.use(morgan('combined'));
-yea
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
