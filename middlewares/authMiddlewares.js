@@ -15,7 +15,7 @@ let SUCCESSFUL_LOGIN_URL;
 
 //force update comment...g
 if(process.env.NODE_ENV === 'production'){
-     CALLBACK_URL     = 'http://vote-your-landing.herokuapp.com/auth/twitch/callback';  // You can run locally with - http://localhost:3000/auth/twitch/callback
+     CALLBACK_URL     = 'https://vote-your-landing.herokuapp.com/twitch/callback/';  // You can run locally with - http://localhost:3000/auth/twitch/callback
     SUCCESSFUL_LOGIN_URL = 'http://vote-your-landing.herokuapp.com/';
 }
 else{

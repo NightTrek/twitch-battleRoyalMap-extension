@@ -22,7 +22,7 @@ export const signin = () => async dispatch => {
     dispatch({ type: AUTH_USER, payload: JSON.parse(localAuth) });
   }else{
     try {
-      const res = await axios.get('http://localhost:3001/auth/user');
+      const res = await axios.get('http://vote-your-landing.herokuapp.com/auth/user');
       // We are getting our token back from res.data.token
       // We want to send this token to our reducer
       console.log("res.data");

@@ -25,6 +25,7 @@ class Welcome extends Component {
 
     }
     componentDidMount() {
+        this.props.signin();
         let cState = this.state;
         let justLoggedIn = window.localStorage.getItem("LoggedIn");
         if(this.props.auth !== undefined && this.props.auth !== null){
