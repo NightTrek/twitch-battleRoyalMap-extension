@@ -45,7 +45,7 @@ if(process.env.NODE_ENV === 'production'){
 let app = express();
 
 
-const allowedOrigins = ["http://localhost:3000","http://localhost:3001", "http://vote-your-landing.herokuapp.com"];
+const allowedOrigins = ["http://localhost:3000","http://localhost:3001", "http://vote-your-landing.herokuapp.com", "https://vote-your-landing.herokuapp.com","https://vote-your-landing.herokuapp.com/vote"];
 
 
 
