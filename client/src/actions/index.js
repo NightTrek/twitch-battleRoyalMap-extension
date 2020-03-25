@@ -17,7 +17,7 @@ export const signin = () => async dispatch => {
   // We can dispatch as many actions as we want as we now have access to dispatch
   // We can also make async requests inside of our actions thanks to redux-thunk
   let localAuth = localStorage.getItem('token');
-  console.log(`local storage token ${localAuth}`);
+  // console.log(`local storage token ${localAuth}`);
   if(localAuth !== undefined && localAuth !== null){
     console.log("local auth success");
     dispatch({ type: AUTH_USER, payload: JSON.parse(localAuth) });

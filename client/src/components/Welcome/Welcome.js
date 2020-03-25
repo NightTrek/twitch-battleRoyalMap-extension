@@ -25,17 +25,15 @@ class Welcome extends Component {
 
     }
     componentDidMount() {
-        console.log("signing in via the api signin route");
         this.props.signin();
         let cState = this.state;
         let justLoggedIn = window.localStorage.getItem("LoggedIn");
+        //check if props.signin() worked and if it did check if the user just logged in. and direct to either the vote page or the welcome page depending.
         if(this.props.auth !== undefined && this.props.auth !== null){
-            let authToken = JSON.parse(this.props.auth);
-            if(authToken.data !== undefined){
-                cState.auth = authToken;
+            if(this.props.auth.data !== undefined){
                 cState.showAuthModal = true;
                 console.log(`justLoggedIn ${justLoggedIn}`);
-                if(justLoggedIn){
+                if(justLoggedIn === true){
                     this.reLogin();
                 }
 
