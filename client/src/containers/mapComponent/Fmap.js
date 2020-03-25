@@ -204,7 +204,7 @@ class Fmap extends Component {
         // and recived an updated coordsArray
         try {
             console.log(this.state.sessionId);
-            const response = await axios.post('http://localhost:3001/api/SendVote', {data:{
+            const response = await axios.post('https://vote-your-landing.herokuapp.com/api/SendVote', {data:{
                     email:this.state.auth.email,
                     sessionId: this.state.sessionId,
                     vote:vote,

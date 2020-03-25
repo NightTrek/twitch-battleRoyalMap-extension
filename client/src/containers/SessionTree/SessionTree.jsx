@@ -103,7 +103,7 @@ class SessionTree extends Component {
 
     async validateSession(){
         let currentSessionID = this.state.joinSessionID;
-        let ValidSessionID = await axios.post('http://localhost:3001/api/validsession', {sessionId:currentSessionID});
+        let ValidSessionID = await axios.post('https://vote-your-landing.herokuapp.com/api/validsession', {sessionId:currentSessionID});
         console.log(ValidSessionID);
         if(ValidSessionID.data !== "error invalid session" && ValidSessionID.data !== "error Session Expired"){
             let currentState =this.state;
@@ -133,7 +133,7 @@ class SessionTree extends Component {
         // } TODO check if session time is valid. ensure there isnt negative session times. or change to slider
         let VoidTime = moment().unix()+parseInt(this.state.newSessionTime);
         console.log(VoidTime);
-        let theNewSession = await axios.post('http://localhost:3001/api/startsession', {data:{email:this.props.auth.data[0].email,VoidTime:VoidTime}});
+        let theNewSession = await axios.post('https://vote-your-landing.herokuapp.com/api/startsession', {data:{email:this.props.auth.data[0].email,VoidTime:VoidTime}});
         console.log(theNewSession);
         if(theNewSession.data !== "error invalid session"){
             let currentState =this.state;
