@@ -30,7 +30,10 @@ class Welcome extends Component {
         let justLoggedIn = window.localStorage.getItem("LoggedIn");
         //check if props.signin() worked and if it did check if the user just logged in. and direct to either the vote page or the welcome page depending.
         if(this.props.auth !== undefined && this.props.auth !== null){
+            console.log("checking to see if auth.data is valid");
+            console.log(this.props.auth.data !== undefined);
             if(this.props.auth.data !== undefined){
+
                 cState.showAuthModal = true;
                 console.log(`justLoggedIn ${justLoggedIn}`);
                 if(justLoggedIn === true){
