@@ -19,10 +19,12 @@ export const signin = () => async dispatch => {
   let localAuth = localStorage.getItem('token');
   console.log(`local storage token ${localAuth}`);
   if(localAuth !== undefined && localAuth !== null){
+    console.log("local auth success");
     dispatch({ type: AUTH_USER, payload: JSON.parse(localAuth) });
   }else{
     try {
-      const res = await axios.get('http://vote-your-landing.herokuapp.com/auth/user');
+      console.log("getting user token for state.");
+      const res = await axios.get('https://vote-your-landing.herokuapp.com/auth/user');
       // We are getting our token back from res.data.token
       // We want to send this token to our reducer
       console.log("res.data");

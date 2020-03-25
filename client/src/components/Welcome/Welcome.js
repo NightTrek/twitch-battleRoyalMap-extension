@@ -25,6 +25,7 @@ class Welcome extends Component {
 
     }
     componentDidMount() {
+        console.log("signing in via the api signin route");
         this.props.signin();
         let cState = this.state;
         let justLoggedIn = window.localStorage.getItem("LoggedIn");
