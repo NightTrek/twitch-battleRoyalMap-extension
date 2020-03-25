@@ -32,7 +32,11 @@ class Welcome extends Component {
         if(this.props.auth !== undefined && this.props.auth !== null){
             console.log("checking to see if auth.data is valid");
             console.log(this.props.auth);
-            let parsedAuth = JSON.parse(this.props.auth);
+            let parsedAuth = this.props.auth;
+            //check to see if the value needs to be parsed
+            if(typeof this.props.auth === "string"){
+                parsedAuth = JSON.parse(this.props.auth);
+            }
             if(parsedAuth.data !== undefined){
 
                 cState.showAuthModal = true;
