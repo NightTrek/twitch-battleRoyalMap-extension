@@ -33,6 +33,7 @@ class Welcome extends Component {
             console.log("checking to see if auth.data is valid");
             console.log(this.props.auth);
             console.log(this.props.auth.data);
+
             if(this.props.auth.data !== undefined){
 
                 cState.showAuthModal = true;
