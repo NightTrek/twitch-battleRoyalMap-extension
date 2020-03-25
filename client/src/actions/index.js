@@ -20,6 +20,7 @@ export const signin = () => async dispatch => {
   // console.log(`local storage token ${localAuth}`);
   if(localAuth !== undefined && localAuth !== null){
     console.log("local auth success");
+    console.log(JSON.parse(localAuth));
     dispatch({ type: AUTH_USER, payload: JSON.parse(localAuth) });
   }else{
     try {
