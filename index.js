@@ -72,7 +72,8 @@ app.use(cors({
     }
 }));
 
-
+//give my server side routing priority over the catch all route
+app.use(routes);
 //
 
 //production setup
@@ -97,7 +98,6 @@ if(process.env.NODE_ENV === 'production') {
 //     app.use(express.static('public'));
 // }
 
-app.use(routes);
 // // Server setup
 const PORT = process.env.PORT || 3001;
 
