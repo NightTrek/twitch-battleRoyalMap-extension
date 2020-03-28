@@ -84,9 +84,11 @@ if(process.env.NODE_ENV === 'production') {
     console.log("use client build folder for production");
     const path = require('path')
     app.use(express.static('client/build'));
-    app.use('/static', express.static(path.join(__dirname, '../build/static')))
-    app.get('/', (req, res) => {
-        res.sendFile(path.join(__dirname, '../build/'))
+    app.use('/static', express.static(path.join(__dirname, '../build/static')));
+
+    app.get('/*', (req, res) => {
+        // res.sendFile(path.join(__dirname, '../build/'))
+        res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
     })
 }
 // else{
