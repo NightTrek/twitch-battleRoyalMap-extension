@@ -20,7 +20,7 @@ if(process.env.NODE_ENV === 'production'){
 }
 else{
     console.log("using the Development CALLBACK URL =================================");
-     CALLBACK_URL          = 'http://localhost:3001/auth/twitch/callback';  // You can run locally with - http://localhost:3000/auth/twitch/callback
+     CALLBACK_URL          = 'http://localhost:3001/auth/twitch/callback/';  // You can run locally with - http://localhost:3000/auth/twitch/callback
     SUCCESSFUL_LOGIN_URL   =  'http://localhost:3000/';
 }
 
