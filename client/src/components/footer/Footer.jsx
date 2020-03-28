@@ -3,9 +3,11 @@ import React from 'react';
 import './footer.css'
 
 
+export default ({children}) => {
 
 
-export default ({ children  }) => {
+
+
     return (
         <footer className={"flexRow "}>
             <div className={"flexCol"}>
@@ -13,14 +15,26 @@ export default ({ children  }) => {
                 <p>Connecting Battle Royal Streamers with their audience</p>
             </div>
             <div className={"flexCol"}>
-                <button>Home</button>
-                <button> Start Session</button>
-                <button>Join Session</button>
+                <div>
+                    <a href={'/'}>Home</a>
+                </div>
+                <div>
+                    <a href={'/vote'}> Start Session</a>
+                </div>
+                <div>
+                    <a href={'/vote'}>Join Session</a>
+                </div>
             </div>
             <div className={"flexCol"}>
-                <button> About us</button>
-                <button>Support</button>
-                <button>Donate</button>
+                <div>
+                    <a> About us</a>
+                </div>
+                <div>
+                    <a>Support</a>
+                </div>
+                <div>
+                    <a>Donate</a>
+                </div>
             </div>
         </footer>
     );
