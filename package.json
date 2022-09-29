@@ -40,11 +40,11 @@
     "react-slick": "^0.24.0",
     "react-slideshow-image": "^1.2.1",
     "reactstrap": "^8.0.1",
-    "recharts": "^1.6.2",
+    "recharts": "^2.1.14",
     "request": "^2.88.0",
     "slick-carousel": "^1.8.1",
     "validator": "^11.1.0",
-    "victory": "^32.3.5",
+    "victory": "^36.6.8",
     "winston": "^3.2.1"
   },
   "devDependencies": {
